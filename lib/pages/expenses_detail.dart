@@ -102,6 +102,7 @@ class PageState extends State<ExpensesDetail>{
                                   height: MediaQuery.of(context).size.height * 0.05,
                                   viewportFraction: 0.27,
                                   onPageChanged: (x, reason){
+                                    print(controller.ready);
                                     print(x.toString());
                                     print(reason.toString());
                                     currentMonth = x;

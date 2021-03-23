@@ -21,6 +21,8 @@ dependencies:
   carousel_slider: ^3.0.0
   mvc_pattern: ^6.6.4+2
   fluttertoast: ^7.1.8
+  email_validator: 1.0.6
+
 
 
 

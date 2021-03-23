@@ -81,22 +81,35 @@ class RestService {
         return response.data;
       }
     } on DioError catch (e) {
-
-      String erMsg = '';
-      switch(e.response.statusCode){
-        case 401:
-          erMsg = "Invalid Credentials";
-          break;
-        case 500:
-          erMsg = "Server Error";
-          break;
-        default:
-          erMsg = "Unknown Error";
+      String erMsg = 'Connection Error';
+      String erMsg2 = '';
+      if(e.response != null){
+        switch(e.response.statusCode){
+          case 401:
+            erMsg = "Invalid Credentials";
+            break;
+          case 500:
+            erMsg = "Server Error";
+            break;
+          default:
+            erMsg = "Unknown Error";
+        }
+        var l = e.response.data['error'];
+        if(l is List<dynamic>){
+          erMsg2 = l[0]['message'][0].toString();
+        }
       }
-      CustomToast(context: context, msg: erMsg, msgColor: red).showToast();
+      print(erMsg2.runtimeType);
+      CustomToast(context: context, msg: erMsg2 == '' ? erMsg : erMsg2, msgColor: red,).showToast();
       return {
         "success": "false",
-        "error": erMsg
+        "error": erMsg2 == '' ? erMsg : erMsg2
+      };
+    } catch(e){
+      CustomToast(context: context, msg: "Connection Error", msgColor: red).showToast();
+      return {
+        "success": "false",
+        "error": "Connection Error"
       };
     }
   }

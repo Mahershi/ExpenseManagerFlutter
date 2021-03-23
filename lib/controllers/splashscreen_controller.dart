@@ -15,14 +15,8 @@ class SplashScreenController extends ControllerMVC{
 
   Future<bool> checkLogin() async{
     SharedPreferences pref = await SharedPreferences.getInstance();
-
     if(pref.containsKey('user')){
-      var user = await pref.get('user');
-      print(user.runtimeType);
-      print(user);
-      userRepo.currentUser = UserModel.fromJson(json.decode(user));
-      print("Fetched User from SP");
-      print(userRepo.currentUser.saveToSP().toString());
+      await userRepo.getFromSP();
       return true;
     }else{
       return false;

@@ -230,13 +230,13 @@ class PageState extends StateMVC<LoginPage> {
                               )
                           ),
                         ),
-                        InkWell(
-                          onTap: (){
-                            print("pressed");
-                            Navigator.of(context).pushNamed('/SignupPage');
-                          },
-                          child: Align(
-                            alignment: Alignment.centerRight,
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: InkWell(
+                            onTap: (){
+                              print("pressed");
+                              Navigator.of(context).pushNamed('/SignupPage');
+                            },
                             child: Container(
                               // decoration: BoxDecoration(border: testBorder),
                               padding: EdgeInsets.symmetric(vertical: 10),

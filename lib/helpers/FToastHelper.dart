@@ -7,8 +7,9 @@ class CustomToast{
   String msg;
   FToast fToast;
   Color msgColor;
+  Duration duration;
 
-  CustomToast({this.context, this.msg, this.msgColor}){
+  CustomToast({this.context, this.msg, this.msgColor, this.duration=const Duration(milliseconds: 1500)}){
     fToast = FToast();
     fToast.init(context);
   }
@@ -17,7 +18,7 @@ class CustomToast{
     fToast.showToast(
       child: getToastWidget(),
       gravity: ToastGravity.TOP,
-      toastDuration: Duration(seconds: 1)
+      toastDuration: duration
     );
   }
 

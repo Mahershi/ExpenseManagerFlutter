@@ -7,4 +7,5 @@ class API{
   /users/3/ to fetch id 3 user or edit
    */
   static String users = 'users';
+  static String register = 'users/';
 }

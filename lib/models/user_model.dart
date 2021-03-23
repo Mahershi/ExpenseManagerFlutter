@@ -15,10 +15,11 @@ class UserModel{
 
   UserModel();
 
-  UserModel.fromJson(jsonMap, {authToken = ''}){
+  UserModel.fromJson(jsonMap, {auth_token = ''}){
     print("rcv in model");
     print(jsonMap.toString());
-    authToken = authToken;
+    print(auth_token.toString());
+    authToken = auth_token;
 
     try{
       id = jsonMap['id'] != null ? jsonMap['id'].toString() : '';

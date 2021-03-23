@@ -12,13 +12,9 @@ class LoginController extends ControllerMVC{
     var respData = await userRepo.loginUser(uname, password, context);
 
     if(respData['success'] == 'true'){
-      userRepo.currentUser = UserModel.fromJson(respData['data']['user'], authToken: respData['data']['auth_token']);
+      userRepo.currentUser = UserModel.fromJson(respData['data']['user'], auth_token: respData['data']['auth_token']);
       print(userRepo.currentUser.saveToSP().toString());
-      SharedPreferences _pref = await SharedPreferences.getInstance();
-      String s = json.encode(userRepo.currentUser.saveToSP());
-      _pref.setString('user', json.encode(userRepo.currentUser.saveToSP()));
-      print("Saved User to SP");
-      print(s);
+      userRepo.saveToSP();
       Navigator.of(context).pushNamedAndRemoveUntil('/HomePage', (route) => false);
     }else{
       print("Error Loggin IN");

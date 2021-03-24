@@ -31,7 +31,7 @@ Color yellow = Colors.yellowAccent;
 Color pinkShade = Color(0xFFEF8767);
 
 // MONTHS
-
+List<String> weekDay = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 //FONT SIZE

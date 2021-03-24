@@ -1,13 +1,16 @@
 import 'package:expensemanager/helpers/constants.dart';
+import 'package:expensemanager/models/expense_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ExpenseItem extends StatefulWidget{
-  IconData myIcon;
-  String text;
-  int value;
+  // IconData myIcon;
+  // String text;
+  // int value;
+  ExpenseModel expense;
+  Color textColor;
 
-  ExpenseItem({this.myIcon, this.value, this.text});
+  ExpenseItem({this.expense, this.textColor});
   @override
   PageState createState() => PageState();
 }
@@ -22,7 +25,7 @@ class PageState extends State<ExpenseItem>{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12),
+      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       // margin: EdgeInsets.all(0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -41,7 +44,7 @@ class PageState extends State<ExpenseItem>{
                 child: Icon(
                   Icons.home,
                   size: MediaQuery.of(context).size.width * 0.06,
-                  color: white,
+                  color: widget.textColor,
                 )
               ),
               SizedBox(
@@ -49,10 +52,10 @@ class PageState extends State<ExpenseItem>{
               ),
               Container(
                 child: Text(
-                  widget.text,
+                  widget.expense.name,
                   style: font.merge(
                     TextStyle(
-                      color: white,
+                      color: widget.textColor,
                       fontSize: MediaQuery.of(context).size.width * 0.04
                     )
                   ),
@@ -62,10 +65,10 @@ class PageState extends State<ExpenseItem>{
           ),
           Container(
             child: Text(
-              "₹ " + widget.value.toString(),
+              "₹ " + widget.expense.amount,
               style: font.merge(
                   TextStyle(
-                      color: white,
+                      color: widget.textColor,
                       fontSize: MediaQuery.of(context).size.width * 0.04
                   )
               ),

@@ -4,6 +4,7 @@ import 'package:expensemanager/models/expense_model.dart';
 
 class ExpenseBatchController extends ControllerMVC{
 
-  ExpenseBatchController();
+  
+
 
 }

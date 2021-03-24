@@ -1,8 +1,8 @@
 import 'package:expensemanager/models/DataSet.dart';
+import 'package:expensemanager/models/expense_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:expensemanager/repositories/settings_repo.dart' as settingsRepo;
 import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
 
@@ -11,6 +11,11 @@ class HomeController extends ControllerMVC{
   int maxValue = 10000;
   List<BarChartGroupData> rawData = List<BarChartGroupData>();
   Map<int, dynamic> dataBarGraph = {};
+
+  DateTime today = DateTime.now();
+
+
+  Map<String, List<ExpenseModel>> expenses = Map<String, List<ExpenseModel>>();
 
   HomeController();
 
@@ -27,9 +32,10 @@ class HomeController extends ControllerMVC{
       'end': todayString,
       'user_id': userRepo.currentUser.id
     };
+
     await exRepo.getExpenses6Months(context, qp: qp);
     // currentMonth = exRepo.expenses.isNotEmpty ? exRepo.expenses.first.month : DateTime.now().month;
-
+    prepareList();
     makeDataSets(context);
   }
 
@@ -40,6 +46,7 @@ class HomeController extends ControllerMVC{
       'month': month,
       'user_id': userRepo.currentUser.id
     };
+
     await exRepo.getExpenses6Months(context, qp: qp);
   }
 
@@ -75,7 +82,7 @@ class HomeController extends ControllerMVC{
       }
       if(this.stateMVC.mounted) {
         setState(() {
-          print("setting state");
+          print("setting state: " + exRepo.expenses.isEmpty.toString());
         });
       }
     }
@@ -87,5 +94,22 @@ class HomeController extends ControllerMVC{
       'user_id': userRepo.currentUser.id
     };
     await exRepo.getSpan(context, qp:qp);
+  }
+
+  Future<void> prepareList({days = 70}) async {
+    for(var i in exRepo.expenses){
+      DateTime temp = DateTime.parse(i.expense_date);
+      print(temp.toString());
+      print(today.difference(temp) < Duration(days: days));
+      if(today.difference(temp) < Duration(days: days))
+      {
+        if (!expenses.containsKey(temp.toString().substring(0, 10)))
+          expenses[temp.toString().substring(0, 10)] = [];
+        expenses[temp.toString().substring(0, 10)].add(i);
+        print("Added: " + i.toMap().toString());
+        for (var j in expenses[temp.toString().substring(0, 10)])
+          print(j.toMap().toString());
+      }
+    }
   }
 }

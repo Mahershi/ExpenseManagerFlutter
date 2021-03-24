@@ -2,6 +2,7 @@ import 'package:expensemanager/controllers/home_controller.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/DataSet.dart';
 import 'package:expensemanager/models/route_arguement.dart';
+import 'package:expensemanager/pages/expense_batch_page.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -117,6 +118,7 @@ class PageState extends StateMVC<HomePage> with WidgetsBindingObserver{
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
                     child: Column(
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         Stack(
                           children: [
@@ -236,7 +238,8 @@ class PageState extends StateMVC<HomePage> with WidgetsBindingObserver{
                               ),
                             )
                           ],
-                        )
+                        ),
+                        ExpenseBatchPage(con: _con,),
                       ],
                     )
                 ),

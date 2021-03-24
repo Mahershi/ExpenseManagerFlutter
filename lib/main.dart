@@ -5,6 +5,8 @@ import 'package:expensemanager/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'app_config.dart';
 import 'package:expensemanager/network/rest_service.dart';
+import 'repositories/settings_repo.dart' as settingsRepo;
+
 
 void main(){
   setUpConfiguration();
@@ -13,12 +15,14 @@ void main(){
 }
 
 class MyApp extends StatelessWidget{
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       onGenerateRoute: RouteGenerator.generateRoute,
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
+      navigatorObservers: [settingsRepo.routeObserver],
     );
   }
 }

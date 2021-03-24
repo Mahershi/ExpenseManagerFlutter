@@ -16,7 +16,7 @@ int latest_year = 0;
 int oldest_month = 0;
 int oldest_year = 0;
 
-Future<void> getExpenses6Months(context, {qp = const {}}) async{
+Future<void> getExpensesDynamicQP(context, {qp = const {}}) async{
   var resp = await RestService.request(
     context: context,
     endpoint: API.expenses,

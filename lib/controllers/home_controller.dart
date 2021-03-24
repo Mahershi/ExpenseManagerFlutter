@@ -33,22 +33,13 @@ class HomeController extends ControllerMVC{
       'user_id': userRepo.currentUser.id
     };
 
-    await exRepo.getExpenses6Months(context, qp: qp);
+    await exRepo.getExpensesDynamicQP(context, qp: qp);
     // currentMonth = exRepo.expenses.isNotEmpty ? exRepo.expenses.first.month : DateTime.now().month;
     prepareList();
     makeDataSets(context);
   }
 
-  Future<void> getExpensesMonth(context, month, year) async{
 
-    var qp = {
-      'year': year,
-      'month': month,
-      'user_id': userRepo.currentUser.id
-    };
-
-    await exRepo.getExpenses6Months(context, qp: qp);
-  }
 
 
   void makeDataSets(context){
@@ -72,7 +63,7 @@ class HomeController extends ControllerMVC{
         rawData.insert(0, DataModel(
             x: i,
             y: dataBarGraph.containsKey(i) ? dataBarGraph[i].toDouble() : 0.0
-        ).getBarChartGroupData(MediaQuery.of(context).size.width/9, currentMonth)
+        ).getBarChartGroupData(MediaQuery.of(context).size.width/9, currentMonth, true)
         );
         if(i==1){
           i=12;
@@ -80,11 +71,27 @@ class HomeController extends ControllerMVC{
           i--;
         }
       }
-      if(this.stateMVC.mounted) {
-        setState(() {
-          print("setting state: " + exRepo.expenses.isEmpty.toString());
-        });
+
+    }else{
+      int j=currentMonth;
+      for(var i=0; i<6; i++){
+
+        rawData.insert(0, DataModel(
+            x:  j,
+            y:  0.0
+        ).getBarChartGroupData(MediaQuery.of(context).size.width/9, currentMonth, false)
+        );
+        if(j == 1){
+          j = 12;
+        }else{
+          j--;
+        }
       }
+    }
+    if(this.stateMVC.mounted) {
+      setState(() {
+        print("setting state: " + exRepo.expenses.isEmpty.toString());
+      });
     }
   }
 

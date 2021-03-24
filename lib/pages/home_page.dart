@@ -1,4 +1,5 @@
 import 'package:expensemanager/controllers/home_controller.dart';
+import 'package:expensemanager/elements/no_expenses.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/DataSet.dart';
 import 'package:expensemanager/models/route_arguement.dart';
@@ -9,18 +10,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
+import 'package:expensemanager/repositories/settings_repo.dart' as settingsRepo;
 
 class HomePage extends StatefulWidget{
   @override
   PageState createState() => PageState();
 }
 
-class PageState extends StateMVC<HomePage> with WidgetsBindingObserver{
+class PageState extends StateMVC<HomePage> with RouteAware{
   HomeController _con;
   int rawDataIndex = 5;
 
   PageState() : super(HomeController()){
     _con = controller;
+  }
+
+  @override
+  void didPopNext(){
+    print("visible");
+    super.didPopNext();
+    _con.getExpenses6Months(context);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    settingsRepo.routeObserver.subscribe(this, ModalRoute.of(context));
+  }
+
+  @override
+  void dispose(){
+    settingsRepo.routeObserver.unsubscribe(this);
+    super.dispose();
   }
 
   @override
@@ -30,10 +51,11 @@ class PageState extends StateMVC<HomePage> with WidgetsBindingObserver{
     _con.getExpensesTimeSpane(context);
     // _con.getExpensesMonth(context, 2, 2021);
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
 
-    });
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,126 +142,130 @@ class PageState extends StateMVC<HomePage> with WidgetsBindingObserver{
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Stack(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: borderRadius20,
-                                  color: primaryColor
-                              ),
-                              // margin: EdgeInsets.all(20),
-                              width: MediaQuery.of(context).size.width,
-                              padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                              child: BarChart(
-                                BarChartData(
-                                  maxY: (_con.maxValue + 3000).toDouble(),
-                                  barGroups: _con.rawData,
-                                  titlesData:FlTitlesData(
-                                      bottomTitles:SideTitles(
-                                          showTitles: true,
-                                          getTextStyles: (value) {
-                                            return TextStyle(
-                                                color: white,
-                                                fontSize: 14,
-                                                letterSpacing: 1.1
+                        Visibility(
+                          visible: true,
+                          child: Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: borderRadius20,
+                                    color: primaryColor
+                                ),
+                                // margin: EdgeInsets.all(20),
+                                width: MediaQuery.of(context).size.width,
+                                padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                child: BarChart(
+                                  BarChartData(
+                                    maxY: (_con.maxValue + 3000).toDouble(),
+                                    barGroups: _con.rawData,
+                                    titlesData:FlTitlesData(
+                                        bottomTitles:SideTitles(
+                                            showTitles: true,
+                                            getTextStyles: (value) {
+                                              return TextStyle(
+                                                  color: white,
+                                                  fontSize: 14,
+                                                  letterSpacing: 1.1
+                                              );
+                                            },
+                                            getTitles:(double values){
+                                              switch(values.toInt()){
+                                                case 1:
+                                                  return "Jan";
+                                                case 2:
+                                                  return "Feb";
+                                                case 3:
+                                                  return "Mar";
+                                                case 4:
+                                                  return "Apr";
+                                                case 5:
+                                                  return "May";
+                                                case 6:
+                                                  return "Jun";
+                                                case 7:
+                                                  return "Jul";
+                                                case 8:
+                                                  return "Aug";
+                                                case 9:
+                                                  return "Sep";
+                                                case 10:
+                                                  return "Oct";
+                                                case 11:
+                                                  return "Nov";
+                                                case 12:
+                                                  return "Dec";
+                                              }
+                                              return "Err";
+                                            }
+                                        ),
+                                        leftTitles: SideTitles(
+                                            showTitles: false
+                                        )
+                                    ),
+                                    borderData: FlBorderData(
+                                        show: false
+                                    ),
+                                    barTouchData: BarTouchData(
+                                      enabled: true,
+                                      touchExtraThreshold: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                      touchCallback: (response){
+                                        print(response.spot);
+
+                                        if(response.spot!=null){
+                                          print(response.spot.touchedBarGroup.x.toString());
+                                          _con.currentMonth = response.spot.touchedBarGroup.x;
+                                          rawDataIndex = response.spot.touchedBarGroupIndex;
+                                          print("RDI");
+                                          print(rawDataIndex.toString());
+                                          _con.makeDataSets(context);
+                                        }
+                                      },
+                                      touchTooltipData: BarTouchTooltipData(
+                                          tooltipRoundedRadius: 12,
+                                          tooltipBgColor: white.withOpacity(0.9),
+                                          getTooltipItem: (bcgd, x, bcrd, y){
+                                            return BarTooltipItem(
+                                                bcrd.y.toString(),
+                                                font.merge(
+                                                    TextStyle(
+                                                        color: primaryColor,
+                                                        fontSize: 16
+                                                    )
+                                                ),
                                             );
                                           },
-                                          getTitles:(double values){
-                                            switch(values.toInt()){
-                                              case 1:
-                                                return "Jan";
-                                              case 2:
-                                                return "Feb";
-                                              case 3:
-                                                return "Mar";
-                                              case 4:
-                                                return "Apr";
-                                              case 5:
-                                                return "May";
-                                              case 6:
-                                                return "Jun";
-                                              case 7:
-                                                return "Jul";
-                                              case 8:
-                                                return "Aug";
-                                              case 9:
-                                                return "Sep";
-                                              case 10:
-                                                return "Oct";
-                                              case 11:
-                                                return "Nov";
-                                              case 12:
-                                                return "Dec";
-                                            }
-                                            return "Err";
-                                          }
                                       ),
-                                      leftTitles: SideTitles(
-                                          showTitles: false
-                                      )
-                                  ),
-                                  borderData: FlBorderData(
-                                      show: false
-                                  ),
-                                  barTouchData: BarTouchData(
-                                    enabled: true,
-                                    touchExtraThreshold: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                    touchCallback: (response){
-                                      print(response.spot);
-
-                                      if(response.spot!=null){
-                                        print(response.spot.touchedBarGroup.x.toString());
-                                        _con.currentMonth = response.spot.touchedBarGroup.x;
-                                        rawDataIndex = response.spot.touchedBarGroupIndex;
-                                        print("RDI");
-                                        print(rawDataIndex.toString());
-                                        _con.makeDataSets(context);
-                                      }
-                                    },
-                                    touchTooltipData: BarTouchTooltipData(
-                                        tooltipRoundedRadius: 12,
-                                        tooltipBgColor: white.withOpacity(0.9),
-                                        getTooltipItem: (bcgd, x, bcrd, y){
-                                          return BarTooltipItem(
-                                              bcrd.y.toString(),
-                                              font.merge(
-                                                  TextStyle(
-                                                      color: primaryColor,
-                                                      fontSize: 16
-                                                  )
-                                              ),
-                                          );
-                                        },
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: InkWell(
-                                onTap: (){
-                                  Navigator.of(context).pushNamed('/ExpensesPage', arguments: RouteArgument(param: {"month":_con.currentMonth, "year": exRepo.latest_year}));
-                                },
-                                child: Container(
-                                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
-                                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                                    // decoration: BoxDecoration(border: testBorder),
-                                    child: Text(
-                                        "Details >>",
-                                      style: font.merge(
-                                        TextStyle(
-                                          color: white
-                                        )
-                                      ),
-                                    )
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: InkWell(
+                                  onTap: (){
+                                    Navigator.of(context).pushNamed('/ExpensesPage', arguments: RouteArgument(param: {"month":_con.currentMonth, "year": exRepo.latest_year}));
+                                  },
+                                  child: Container(
+                                      padding: EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
+                                      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                                      // decoration: BoxDecoration(border: testBorder),
+                                      child: Text(
+                                          "Details >>",
+                                        style: font.merge(
+                                          TextStyle(
+                                            color: white
+                                          )
+                                        ),
+                                      )
+                                  ),
                                 ),
                               ),
-                            )
-                          ],
+                              // exRepo.expenses.isEmpty ? NoExpenses(textColor: primaryColor,) : Container(height: 0, width: 0,),
+                            ],
+                          ),
                         ),
-                        ExpenseBatchPage(con: _con,),
+                        _con.expenses.isEmpty ? Container(child: NoExpenses(textColor: primaryColor,),margin: EdgeInsets.symmetric(vertical: 30),) : ExpenseBatchPage(con: _con,),
                       ],
                     )
                 ),

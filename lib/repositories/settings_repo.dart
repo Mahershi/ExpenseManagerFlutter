@@ -5,7 +5,9 @@ import 'package:expensemanager/helpers/utilities.dart';
 import 'package:expensemanager/models/category_model.dart';
 import 'package:expensemanager/network/rest_service.dart';
 import 'package:expensemanager/network/APIs.dart';
+import 'package:flutter/material.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 List<CategoryModel> categories = List<CategoryModel>();
 
 Future<bool> testConnection(context) async{

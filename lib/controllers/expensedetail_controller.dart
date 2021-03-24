@@ -1,11 +1,16 @@
+import 'dart:async';
+
 import 'package:expensemanager/repositories/user_repo.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
 
 class ExpenseDetailController extends ControllerMVC{
+  bool call = true;
   List<String> monthsLocal = ['None', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   List<String> yearLocal = [];
+  Timer timer = Timer.periodic(Duration(seconds: 10), (timer) { });
+  Timer timer2 = Timer.periodic(Duration(seconds: 10), (timer) { });
 
   ExpenseDetailController(){
     print(exRepo.latest_month+1);
@@ -24,7 +29,8 @@ class ExpenseDetailController extends ControllerMVC{
       'user_id': userRepo.currentUser.id
     };
 
-    await exRepo.getExpensesDynamicQP(context, qp: qp);
+    if(call)
+      await exRepo.getExpensesDynamicQP(context, qp: qp);
   }
 
 

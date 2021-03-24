@@ -29,6 +29,7 @@ Future<void> getExpensesDynamicQP(context, {qp = const {}}) async{
     expenses.clear();
     for (var i in resp['data']){
       var expense = ExpenseModel.fromJson(i);
+      print(expense.toMap().toString());
       expenses.add(expense);
     }
   }

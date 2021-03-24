@@ -104,18 +104,19 @@ class HomeController extends ControllerMVC{
   }
 
   Future<void> prepareList({days = 70}) async {
+    expenses.clear();
     for(var i in exRepo.expenses){
       DateTime temp = DateTime.parse(i.expense_date);
-      print(temp.toString());
-      print(today.difference(temp) < Duration(days: days));
+      // print(temp.toString());
+      // print(today.difference(temp) < Duration(days: days));
       if(today.difference(temp) < Duration(days: days))
       {
         if (!expenses.containsKey(temp.toString().substring(0, 10)))
           expenses[temp.toString().substring(0, 10)] = [];
         expenses[temp.toString().substring(0, 10)].add(i);
-        print("Added: " + i.toMap().toString());
-        for (var j in expenses[temp.toString().substring(0, 10)])
-          print(j.toMap().toString());
+        // print("Added: " + i.toMap().toString());
+        // for (var j in expenses[temp.toString().substring(0, 10)])
+          // print(j.toMap().toString());
       }
     }
   }

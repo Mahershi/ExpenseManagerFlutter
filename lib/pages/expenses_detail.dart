@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expensemanager/controllers/expensedetail_controller.dart';
 import 'package:expensemanager/elements/back_button_app_bar.dart';
@@ -25,6 +27,7 @@ class PageState extends StateMVC<ExpensesDetail>{
   int currentMonth = 0;
   String heading = "Expenses";
   int currentYear = 1;
+  int yearIndex = DateTime.now().year;
 
   PageState() : super(ExpenseDetailController()){
     _con = controller;
@@ -33,10 +36,13 @@ class PageState extends StateMVC<ExpensesDetail>{
   @override
   void initState(){
     super.initState();
+
     print(widget.routeArgument.param.toString());
     currentMonth = widget.routeArgument.param['month'] - 1;
-    currentYear = _con.yearLocal.indexOf(exRepo.latest_year.toString());
+    yearIndex = _con.yearLocal.indexOf(exRepo.latest_year.toString());
+    currentYear = widget.routeArgument.param['year'];
     print("CM@: " +currentMonth.toString());
+    _con.getExpensesMonth(context, currentMonth+1, currentYear);
   }
 
   @override
@@ -117,11 +123,21 @@ class PageState extends StateMVC<ExpensesDetail>{
                                         height: MediaQuery.of(context).size.height * 0.05,
                                         viewportFraction: 0.27,
                                         onPageChanged: (x, reason){
-                                          currentYear = x;
+                                          yearIndex = x;
+                                          currentYear = int.parse(_con.yearLocal[yearIndex]);
                                           print("cy: " + currentYear.toString());
-                                          setState(() {
 
-                                          });
+                                          if(reason == CarouselPageChangedReason.manual){
+                                            _con.timer.cancel();
+                                            _con.timer = Timer.periodic(Duration(milliseconds: 1500), (timer) {
+                                              _con.getExpensesMonth(context, currentMonth+1, currentYear);
+                                              _con.timer.cancel();
+                                            });
+                                          }else{
+                                            _con.getExpensesMonth(context, currentMonth+1, currentYear);
+                                          }
+
+                                          setState(() {});
                                         }
                                     ),
                                     items: _con.yearLocal.map((e){
@@ -140,7 +156,7 @@ class PageState extends StateMVC<ExpensesDetail>{
                                                 e,
                                                 style: font.merge(
                                                     TextStyle(
-                                                        color: _con.yearLocal.indexOf(e) == currentYear ? white : secondColor,
+                                                        color: _con.yearLocal.indexOf(e) == yearIndex ? white : secondColor,
                                                         letterSpacing: 1.3
                                                     )
                                                 ),
@@ -159,16 +175,25 @@ class PageState extends StateMVC<ExpensesDetail>{
                                       viewportFraction: 0.27,
                                       onPageChanged: (x, reason){
                                         currentMonth = x;
+                                        print(reason.toString());
                                         print("CM:" + currentMonth.toString());
-                                        setState(() {
+                                        if(reason == CarouselPageChangedReason.manual){
+                                          _con.timer.cancel();
+                                          _con.timer = Timer.periodic(Duration(milliseconds: 1500), (timer) {
+                                            _con.getExpensesMonth(context, currentMonth+1, currentYear);
+                                            _con.timer.cancel();
+                                          });
+                                        }else{
+                                          _con.getExpensesMonth(context, currentMonth+1, currentYear);
+                                        }
 
-                                        });
+                                        setState(() {});
                                       }
                                     ),
-                                    items: (currentYear == _con.yearLocal.length-1 ? _con.monthsLocal : months).map((e){
+                                    items: (yearIndex == _con.yearLocal.length-1 ? _con.monthsLocal : months).map((e){
                                       return InkWell(
                                         onTap: (){
-                                          currentMonth = (currentYear == _con.yearLocal.length-1 ? _con.monthsLocal : months).indexOf(e);
+                                          currentMonth = (yearIndex == _con.yearLocal.length-1 ? _con.monthsLocal : months).indexOf(e);
                                           carouselController.animateToPage(currentMonth);
                                           // print("CM:" + currentMonth.toString());
                                         },
@@ -181,7 +206,7 @@ class PageState extends StateMVC<ExpensesDetail>{
                                               e.substring(0, 3),
                                               style: font.merge(
                                                 TextStyle(
-                                                  color: (currentYear == _con.yearLocal.length-1 ? _con.monthsLocal : months).indexOf(e) == currentMonth ? white : secondColor,
+                                                  color: (yearIndex == _con.yearLocal.length-1 ? _con.monthsLocal : months).indexOf(e) == currentMonth ? white : secondColor,
                                                   letterSpacing: 1.3
                                                 )
                                               ),

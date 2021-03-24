@@ -8,4 +8,9 @@ class API{
    */
   static String users = 'users';
   static String register = 'users/';
+
+  static String categories = 'categories';
+
+  static String expenses = 'expenses';
+  static String expenses_span = 'expenses/date_span';
 }

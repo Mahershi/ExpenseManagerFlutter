@@ -1,10 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:expensemanager/controllers/expensedetail_controller.dart';
 import 'package:expensemanager/elements/back_button_app_bar.dart';
 import 'package:expensemanager/elements/expense_item.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/route_arguement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 
 class ExpensesDetail extends StatefulWidget{
   RouteArgument routeArgument;
@@ -14,16 +17,26 @@ class ExpensesDetail extends StatefulWidget{
   PageState createState() => PageState();
 }
 
-class PageState extends State<ExpensesDetail>{
-  CarouselController controller = CarouselController();
+class PageState extends StateMVC<ExpensesDetail>{
+  ExpenseDetailController _con;
+  CarouselController carouselController = CarouselController();
+  CarouselController carouselController2 = CarouselController();
+
   int currentMonth = 0;
   String heading = "Expenses";
+  int currentYear = 1;
+
+  PageState() : super(ExpenseDetailController()){
+    _con = controller;
+  }
 
   @override
   void initState(){
     super.initState();
-    currentMonth = widget.routeArgument.param;
-    print(currentMonth.toString());
+    print(widget.routeArgument.param.toString());
+    currentMonth = widget.routeArgument.param['month'] - 1;
+    currentYear = _con.yearLocal.indexOf(exRepo.latest_year.toString());
+    print("CM@: " +currentMonth.toString());
   }
 
   @override
@@ -94,44 +107,91 @@ class PageState extends State<ExpensesDetail>{
                             child: Container(
                               width: MediaQuery.of(context).size.width / 2,
                               // decoration: BoxDecoration(border: testBorder),
-                              child: CarouselSlider(
-                                carouselController: controller,
-                                options: CarouselOptions(
-                                  initialPage: currentMonth,
-                                  enableInfiniteScroll: false,
-                                  height: MediaQuery.of(context).size.height * 0.05,
-                                  viewportFraction: 0.27,
-                                  onPageChanged: (x, reason){
-                                    print(controller.ready);
-                                    print(x.toString());
-                                    print(reason.toString());
-                                    currentMonth = x;
-                                    setState(() {
+                              child: Column(
+                                children: [
+                                  CarouselSlider(
+                                    carouselController: carouselController2,
+                                    options: CarouselOptions(
+                                        initialPage: currentYear,
+                                        enableInfiniteScroll: false,
+                                        height: MediaQuery.of(context).size.height * 0.05,
+                                        viewportFraction: 0.27,
+                                        onPageChanged: (x, reason){
+                                          currentYear = x;
+                                          print("cy: " + currentYear.toString());
+                                          setState(() {
 
-                                    });
-                                  }
-                                ),
-                                items: months.map((e){
-                                  return InkWell(
-                                    onTap: (){
-                                      currentMonth = months.indexOf(e);
-                                      controller.animateToPage(currentMonth);
-                                    },
-                                    child: Container(
-                                      // decoration: BoxDecoration(border: testBorder),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        e.substring(0, 3),
-                                        style: font.merge(
-                                          TextStyle(
-                                            color: months.indexOf(e) == currentMonth ? white : secondColor,
-                                            letterSpacing: 1.3
-                                          )
-                                        ),
-                                      )
+                                          });
+                                        }
                                     ),
-                                  );
-                                }).toList(),
+                                    items: _con.yearLocal.map((e){
+                                      return InkWell(
+                                        onTap: (){
+                                          currentYear = _con.yearLocal.indexOf(e);
+                                          // print("cy: " + currentYear.toString());
+                                          carouselController2.animateToPage(currentYear);
+                                        },
+                                        child: Visibility(
+                                          visible: e == "None" ? false : true,
+                                          child: Container(
+                                            // decoration: BoxDecoration(border: testBorder),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                e,
+                                                style: font.merge(
+                                                    TextStyle(
+                                                        color: _con.yearLocal.indexOf(e) == currentYear ? white : secondColor,
+                                                        letterSpacing: 1.3
+                                                    )
+                                                ),
+                                              )
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                  CarouselSlider(
+                                    carouselController: carouselController,
+                                    options: CarouselOptions(
+                                      initialPage: currentMonth,
+                                      enableInfiniteScroll: false,
+                                      height: MediaQuery.of(context).size.height * 0.05,
+                                      viewportFraction: 0.27,
+                                      onPageChanged: (x, reason){
+                                        currentMonth = x;
+                                        print("CM:" + currentMonth.toString());
+                                        setState(() {
+
+                                        });
+                                      }
+                                    ),
+                                    items: (currentYear == _con.yearLocal.length-1 ? _con.monthsLocal : months).map((e){
+                                      return InkWell(
+                                        onTap: (){
+                                          currentMonth = (currentYear == _con.yearLocal.length-1 ? _con.monthsLocal : months).indexOf(e);
+                                          carouselController.animateToPage(currentMonth);
+                                          // print("CM:" + currentMonth.toString());
+                                        },
+                                        child: Visibility(
+                                          visible: e == "None" ? false : true,
+                                          child: Container(
+                                            // decoration: BoxDecoration(border: testBorder),
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              e.substring(0, 3),
+                                              style: font.merge(
+                                                TextStyle(
+                                                  color: (currentYear == _con.yearLocal.length-1 ? _con.monthsLocal : months).indexOf(e) == currentMonth ? white : secondColor,
+                                                  letterSpacing: 1.3
+                                                )
+                                              ),
+                                            )
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ],
                               )
                             ),
                           )
@@ -142,21 +202,7 @@ class PageState extends State<ExpensesDetail>{
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
-                            ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
+                            // ExpenseItem(myIcon: Icons.home, text: "Food", value: 300,),
                           ],
                         )
                       ),

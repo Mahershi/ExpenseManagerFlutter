@@ -33,7 +33,6 @@ Color pinkShade = Color(0xFFEF8767);
 // MONTHS
 
 List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-List<String> monthsShort = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 //FONT SIZE
 

@@ -40,7 +40,7 @@ class UserModel{
 
   Map toMap(){
     var m = Map<String, dynamic>();
-    m['id'] = id;
+    m['id'] = int.parse(id);
     m['name'] = name;
     m['uname'] = uname;
     m['email'] = email;

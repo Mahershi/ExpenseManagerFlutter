@@ -31,6 +31,7 @@ class PageState extends StateMVC<SplashScreen>{
   Future<void> initializeApp() async{
     var connection = await _con.testConnection(context);
     if(connection){
+      _con.getCategories(context);
       var isLoggedIn = await _con.checkLogin();
       if(isLoggedIn){
         Navigator.of(context).pushNamedAndRemoveUntil('/HomePage', (route) => false);

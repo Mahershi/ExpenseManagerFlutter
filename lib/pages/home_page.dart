@@ -1,3 +1,4 @@
+import 'package:expensemanager/controllers/home_controller.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/DataSet.dart';
 import 'package:expensemanager/models/route_arguement.dart';
@@ -5,23 +6,31 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 
 class HomePage extends StatefulWidget{
   @override
   PageState createState() => PageState();
 }
 
-class PageState extends State<HomePage> with WidgetsBindingObserver{
-  List<BarChartGroupData> rawData = List<BarChartGroupData>();
-  int currentMonth = 6;
-  int rawDataIndex = 3;
+class PageState extends StateMVC<HomePage> with WidgetsBindingObserver{
+  HomeController _con;
+  int rawDataIndex = 5;
+
+  PageState() : super(HomeController()){
+    _con = controller;
+  }
 
   @override
   void initState(){
     super.initState();
+    _con.getExpenses6Months(context);
+    _con.getExpensesTimeSpane(context);
+    // _con.getExpensesMonth(context, 2, 2021);
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      makeDataSets();
+
     });
   }
   @override
@@ -60,10 +69,12 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
                   Align(
                     alignment: Alignment.center,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                             child: Text(
-                              months[currentMonth] + "'s Expenses",
+                              // months[_con.currentMonth] + "'s Expenses",
+                              _con.dataBarGraph.isNotEmpty ? months[_con.currentMonth-1] + "'s Expenses" : "No Expenses",
                               style: font.merge(
                                   TextStyle(
                                       fontSize: MediaQuery.of(context).size.width * 0.04,
@@ -75,16 +86,19 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                            child: Text(
-                              "₹ " + (rawData.isNotEmpty ? rawData[rawDataIndex].barRods[0].y.toString() : ""),
-                              style: font.merge(
-                                  TextStyle(
-                                      fontSize: MediaQuery.of(context).size.width * 0.065,
-                                      color: white
-                                  )
-                              ),
-                            )
+                        Visibility(
+                          visible: _con.dataBarGraph.isNotEmpty,
+                          child: Container(
+                              child: Text(
+                                "₹ " + (_con.rawData.isNotEmpty ? _con.rawData[rawDataIndex].barRods[0].y.toString() : ""),
+                                style: font.merge(
+                                    TextStyle(
+                                        fontSize: MediaQuery.of(context).size.width * 0.065,
+                                        color: white
+                                    )
+                                ),
+                              )
+                          ),
                         )
                       ],
                     ),
@@ -117,8 +131,8 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
                               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                               child: BarChart(
                                 BarChartData(
-                                  maxY: 9000,
-                                  barGroups: rawData,
+                                  maxY: (_con.maxValue + 3000).toDouble(),
+                                  barGroups: _con.rawData,
                                   titlesData:FlTitlesData(
                                       bottomTitles:SideTitles(
                                           showTitles: true,
@@ -131,33 +145,32 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
                                           },
                                           getTitles:(double values){
                                             switch(values.toInt()){
-                                              case 0:
-                                                return "Jan";
                                               case 1:
-                                                return "Feb";
+                                                return "Jan";
                                               case 2:
-                                                return "Mar";
+                                                return "Feb";
                                               case 3:
-                                                return "Apr";
+                                                return "Mar";
                                               case 4:
-                                                return "May";
+                                                return "Apr";
                                               case 5:
-                                                return "Jun";
+                                                return "May";
                                               case 6:
-                                                return "Jul";
+                                                return "Jun";
                                               case 7:
-                                                return "Aug";
+                                                return "Jul";
                                               case 8:
-                                                return "Sep";
+                                                return "Aug";
                                               case 9:
-                                                return "Oct";
+                                                return "Sep";
                                               case 10:
-                                                return "Nov";
+                                                return "Oct";
                                               case 11:
+                                                return "Nov";
+                                              case 12:
                                                 return "Dec";
-
                                             }
-                                            return "A";
+                                            return "Err";
                                           }
                                       ),
                                       leftTitles: SideTitles(
@@ -168,12 +181,18 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
                                       show: false
                                   ),
                                   barTouchData: BarTouchData(
+                                    enabled: true,
+                                    touchExtraThreshold: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                     touchCallback: (response){
+                                      print(response.spot);
+
                                       if(response.spot!=null){
                                         print(response.spot.touchedBarGroup.x.toString());
-                                        currentMonth = response.spot.touchedBarGroup.x;
+                                        _con.currentMonth = response.spot.touchedBarGroup.x;
                                         rawDataIndex = response.spot.touchedBarGroupIndex;
-                                        makeDataSets();
+                                        print("RDI");
+                                        print(rawDataIndex.toString());
+                                        _con.makeDataSets(context);
                                       }
                                     },
                                     touchTooltipData: BarTouchTooltipData(
@@ -187,7 +206,7 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
                                                       color: primaryColor,
                                                       fontSize: 16
                                                   )
-                                              )
+                                              ),
                                           );
                                         },
                                     ),
@@ -199,7 +218,7 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
                               alignment: Alignment.topRight,
                               child: InkWell(
                                 onTap: (){
-                                  Navigator.of(context).pushNamed('/ExpensesPage', arguments: RouteArgument(param: currentMonth));
+                                  Navigator.of(context).pushNamed('/ExpensesPage', arguments: RouteArgument(param: {"month":_con.currentMonth, "year": exRepo.latest_year}));
                                 },
                                 child: Container(
                                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
@@ -229,16 +248,5 @@ class PageState extends State<HomePage> with WidgetsBindingObserver{
     );
   }
 
-  void makeDataSets(){
-    rawData = List<BarChartGroupData>();
-    rawData.add(DataModel(x: 3, y: 5000).getBarChartGroupData(MediaQuery.of(context).size.width/10, currentMonth));
-    rawData.add(DataModel(x: 4, y: 4300).getBarChartGroupData(MediaQuery.of(context).size.width/10, currentMonth));
-    rawData.add(DataModel(x: 5, y: 6788).getBarChartGroupData(MediaQuery.of(context).size.width/10, currentMonth));
-    rawData.add(DataModel(x: 6, y: 7000).getBarChartGroupData(MediaQuery.of(context).size.width/10, currentMonth));
-    rawData.add(DataModel(x: 7, y: 3000).getBarChartGroupData(MediaQuery.of(context).size.width/10, currentMonth));
-    rawData.add(DataModel(x: 8, y: 7000).getBarChartGroupData(MediaQuery.of(context).size.width/10, currentMonth));
-    setState(() {
 
-    });
-  }
 }

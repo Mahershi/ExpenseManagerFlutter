@@ -40,3 +40,10 @@ Future<void> getCategories(context) async{
     print(i.toMap().toString());
   }
 }
+
+CategoryModel getCategoryById(id){
+  for(var i in categories){
+    if(i.id == id)
+      return i;
+  }
+}

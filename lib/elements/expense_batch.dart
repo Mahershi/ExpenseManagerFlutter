@@ -1,3 +1,4 @@
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/elements/expense_item.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/expense_model.dart';
@@ -25,6 +26,13 @@ class PageState extends State<ExpenseBatch>{
   }
 
   @override
+  void didUpdateWidget(ExpenseBatch oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    calculateTotal();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     print(widget.expenses.length);
     return Container(
@@ -50,7 +58,7 @@ class PageState extends State<ExpenseBatch>{
                       style: font.merge(
                         TextStyle(
                           fontSize: MediaQuery.of(context).size.width * 0.045,
-                          letterSpacing: 1.1,
+                          letterSpacing: 1.5,
                           fontWeight: FontWeight.w800,
                           color: white
                         )
@@ -80,7 +88,7 @@ class PageState extends State<ExpenseBatch>{
                   style: font.merge(
                       TextStyle(
                           fontSize: MediaQuery.of(context).size.width * 0.03,
-                          letterSpacing: 1.1,
+                          letterSpacing: 1.2,
                           fontWeight: FontWeight.w300,
                           color: white
                       )
@@ -108,12 +116,14 @@ class PageState extends State<ExpenseBatch>{
   }
 
   void calculateTotal(){
+    total = 0;
     for(var i in widget.expenses){
+      print("Total: " + total.toString());
       total += int.parse(i.amount);
+      print("Total: " + total.toString());
     }
-    if(mounted)
-      setState(() {
-
-      });
+    setState(() {
+      print(" Set Total: " + total.toString());
+    });
   }
 }

@@ -6,6 +6,13 @@ class ClusterModel{
   String created_date;
   String expenses;
 
+  ClusterModel.none(){
+    id = '0';
+    name = "None";
+    expenses = '';
+    created_date = '';
+  }
+
   ClusterModel.fromJson(jsonMap){
     try{
       id = jsonMap['id'] != null ? jsonMap['id'].toString() : '';
@@ -24,5 +31,7 @@ class ClusterModel{
     m['name'] = name;
     m['created_date'] = created_date;
     m['expenses'] = expenses;
+
+    return m;
   }
 }

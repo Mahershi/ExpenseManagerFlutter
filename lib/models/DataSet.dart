@@ -10,7 +10,7 @@ class DataModel{
   BarChartGroupData getBarChartGroupData(width, currentMonth, zero){
     return BarChartGroupData(
       x: x,
-      showingTooltipIndicators: zero ? x == currentMonth ? [0] : [] : [],
+      showingTooltipIndicators: zero ? x == currentMonth ? [] : [] : [],
       barRods: [
         BarChartRodData(
           y: y,

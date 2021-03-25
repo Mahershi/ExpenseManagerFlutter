@@ -1,3 +1,4 @@
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/controllers/home_controller.dart';
 import 'package:expensemanager/elements/no_expenses.dart';
 import 'package:expensemanager/helpers/constants.dart';
@@ -29,7 +30,9 @@ class PageState extends StateMVC<HomePage> with RouteAware{
   void didPopNext(){
     print("visible");
     super.didPopNext();
-    _con.getExpenses6Months(context);
+    // _con.getExpenses6Months(context);
+    print("Notifying pop");
+    ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
   }
 
   @override
@@ -47,13 +50,19 @@ class PageState extends StateMVC<HomePage> with RouteAware{
   @override
   void initState(){
     super.initState();
+    ExpenseBloc.expEventStream.listen((event)async{
+      if(event == ExpenseEvent.RefreshHome) {
+        await _con.getExpenses6Months(context);
+      }
+      // ExpenseBloc.mapexpEventToState(event);
+    });
     _con.getExpenses6Months(context);
     _con.getExpensesTimeSpane(context);
+    _con.getClusters();
     // _con.getExpensesMonth(context, 2, 2021);
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
 
   }
-
 
 
   @override
@@ -113,7 +122,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                           visible: _con.dataBarGraph.isNotEmpty,
                           child: Container(
                               child: Text(
-                                "₹ " + (_con.rawData.isNotEmpty ? _con.rawData[rawDataIndex].barRods[0].y.toString() : ""),
+                                "₹ " + (_con.rawData.isNotEmpty ? _con.rawData[rawDataIndex].barRods[0].y.toInt().toString() : ""),
                                 style: font.merge(
                                     TextStyle(
                                         fontSize: MediaQuery.of(context).size.width * 0.065,
@@ -211,11 +220,12 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                       touchExtraThreshold: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                       touchCallback: (response){
                                         print(response.spot);
-
                                         if(response.spot!=null){
                                           print(response.spot.touchedBarGroup.x.toString());
                                           _con.currentMonth = response.spot.touchedBarGroup.x;
                                           rawDataIndex = response.spot.touchedBarGroupIndex;
+                                          _con.currentYear = _con.dataBarGraph[_con.currentMonth]['year'];
+                                          print("CM: " + _con.currentMonth.toString() + ", CY: " + _con.currentYear.toString());
                                           print("RDI");
                                           print(rawDataIndex.toString());
                                           _con.makeDataSets(context);
@@ -244,17 +254,18 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                 alignment: Alignment.topRight,
                                 child: InkWell(
                                   onTap: (){
-                                    Navigator.of(context).pushNamed('/ExpensesPage', arguments: RouteArgument(param: {"month":_con.currentMonth, "year": exRepo.latest_year}));
+                                    Navigator.of(context).pushNamed('/ExpensesPage', arguments: RouteArgument(param: {"month":_con.currentMonth, "year": _con.currentYear}));
                                   },
                                   child: Container(
                                       padding: EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 20),
                                       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                                       // decoration: BoxDecoration(border: testBorder),
                                       child: Text(
-                                          "Details >>",
+                                          "Expenses >>",
                                         style: font.merge(
                                           TextStyle(
-                                            color: white
+                                            color: white,
+                                            letterSpacing: 1.1
                                           )
                                         ),
                                       )

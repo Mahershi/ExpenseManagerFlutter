@@ -23,16 +23,17 @@ Future<void> getExpensesDynamicQP(context, {qp = const {}}) async{
     authRequired: false,
     queryParameters: qp
   );
-  print("SSS");
-  log(resp['data'].toString());
+  // print("SSS");
+  // log(resp['data'].toString());
   if(resp['success'] == 'true'){
     expenses.clear();
     for (var i in resp['data']){
       var expense = ExpenseModel.fromJson(i);
-      print(expense.toMap().toString());
+      // print(expense.toMap().toString());
       expenses.add(expense);
     }
   }
+  print("expences calculater");
 }
 
 Future<void> getSpan(context, {qp = const {}}) async{
@@ -53,4 +54,33 @@ Future<void> getSpan(context, {qp = const {}}) async{
     oldest_month = int.parse(resp['data']['oldest_month'].toString());
     oldest_year = int.parse(resp['data']['oldest_year'].toString());
   }
+}
+
+Future<bool> saveExpense(ExpenseModel expense, context) async{
+  String api = API.expenses + '/';
+  String method = 'POST';
+  if(expense.id != null) {
+    api += '${expense.id}/';
+    method = 'PATCH';
+  }
+
+  // print(api);
+  var data = expense.toMap();
+  // print("TO Send");
+  // print(data.toString());
+
+  var resp = await RestService.request(
+    context: context,
+    endpoint: api,
+    data: data,
+    method: method,
+    authRequired: false,
+  );
+  // print("\n\nResponse:1111");
+  // print(resp['data'].toString());
+  if(resp['success'] == 'true'){
+    print("Returning True");
+    return true;
+  }
+  return false;
 }

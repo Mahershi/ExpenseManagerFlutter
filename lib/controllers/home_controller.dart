@@ -1,3 +1,4 @@
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/models/DataSet.dart';
 import 'package:expensemanager/models/expense_model.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -5,10 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
+import 'package:expensemanager/repositories/cluster_repo.dart' as clusterRepo;
 
 class HomeController extends ControllerMVC{
   int currentMonth = DateTime.now().month;
-  int maxValue = 10000;
+  int currentYear = exRepo.latest_year;
+  int maxValue = 0;
   List<BarChartGroupData> rawData = List<BarChartGroupData>();
   Map<int, dynamic> dataBarGraph = {};
 
@@ -19,13 +22,16 @@ class HomeController extends ControllerMVC{
 
   HomeController();
 
+  Future<void> getClusters() async{
+    await clusterRepo.getClusters(this.stateMVC.context);
+  }
 
   Future<void> getExpenses6Months(context) async{
     DateTime today = DateTime.now();
     String todayString = today.year.toString() + "-" + today.month.toString() + '-' + '30';
     today = DateTime(today.year, today.month-6, 1);
     String spanString = today.year.toString() + "-" + (today.month).toString() + '-' + today.day.toString();
-    print(todayString + "," + spanString);
+    // print(todayString + "," + spanString);
 
     var qp = {
       'start': spanString,
@@ -34,35 +40,37 @@ class HomeController extends ControllerMVC{
     };
 
     await exRepo.getExpensesDynamicQP(context, qp: qp);
+
     // currentMonth = exRepo.expenses.isNotEmpty ? exRepo.expenses.first.month : DateTime.now().month;
-    prepareList();
+    await prepareList();
     makeDataSets(context);
   }
 
 
-
-
   void makeDataSets(context){
+    int prevMonth = 1;
     dataBarGraph.clear();
     rawData = [];
     for(var ex in exRepo.expenses){
-      dataBarGraph[ex.month] = 0;
+      // print(ex.month.toString() + ", " + ex.year.toString());
+      dataBarGraph[ex.month] = {
+        'amount': 0,
+        'year': ex.year
+      };
     }
     for(var ex in exRepo.expenses){
-      dataBarGraph[ex.month] = dataBarGraph[ex.month] + int.parse(ex.amount);
+      dataBarGraph[ex.month]['amount'] = dataBarGraph[ex.month]['amount'] + int.parse(ex.amount);
     }
-    print("Temp");
-    print(dataBarGraph.toString());
   dataBarGraph.forEach((key, value) {
-    if(value > maxValue)
-      maxValue = value;
+    if(value['amount'] > maxValue)
+      maxValue = value['amount'];
   });
 
     if(dataBarGraph.isNotEmpty){
       for(var i=dataBarGraph.keys.first, j=0; j<6; j++){
         rawData.insert(0, DataModel(
             x: i,
-            y: dataBarGraph.containsKey(i) ? dataBarGraph[i].toDouble() : 0.0
+            y: dataBarGraph.containsKey(i) ? dataBarGraph[i]['amount'].toDouble() : 0.0
         ).getBarChartGroupData(MediaQuery.of(context).size.width/9, currentMonth, true)
         );
         if(i==1){
@@ -75,7 +83,6 @@ class HomeController extends ControllerMVC{
     }else{
       int j=currentMonth;
       for(var i=0; i<6; i++){
-
         rawData.insert(0, DataModel(
             x:  j,
             y:  0.0
@@ -90,7 +97,7 @@ class HomeController extends ControllerMVC{
     }
     if(this.stateMVC.mounted) {
       setState(() {
-        print("setting state: " + exRepo.expenses.isEmpty.toString());
+        // print("setting state: " + exRepo.expenses.isEmpty.toString());
       });
     }
   }
@@ -101,9 +108,10 @@ class HomeController extends ControllerMVC{
       'user_id': userRepo.currentUser.id
     };
     await exRepo.getSpan(context, qp:qp);
+    currentYear = exRepo.latest_year;
   }
 
-  Future<void> prepareList({days = 70}) async {
+  Future<void> prepareList({days = 7}) async {
     expenses.clear();
     for(var i in exRepo.expenses){
       DateTime temp = DateTime.parse(i.expense_date);
@@ -115,8 +123,8 @@ class HomeController extends ControllerMVC{
           expenses[temp.toString().substring(0, 10)] = [];
         expenses[temp.toString().substring(0, 10)].add(i);
         // print("Added: " + i.toMap().toString());
-        // for (var j in expenses[temp.toString().substring(0, 10)])
-          // print(j.toMap().toString());
+        for (var j in expenses[temp.toString().substring(0, 10)])
+          print(j.toMap().toString());
       }
     }
   }

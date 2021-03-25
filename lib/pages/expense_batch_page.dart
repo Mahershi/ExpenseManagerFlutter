@@ -1,3 +1,4 @@
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/controllers/expense_batch_controller.dart';
 import 'package:expensemanager/controllers/home_controller.dart';
 import 'package:expensemanager/elements/expense_batch.dart';

@@ -13,4 +13,6 @@ class API{
 
   static String expenses = 'expenses';
   static String expenses_span = 'expenses/date_span';
+
+  static String clusters = 'clusters';
 }

@@ -1,5 +1,6 @@
 import 'package:expensemanager/helpers/custom_trace.dart';
 import 'package:expensemanager/network/APIs.dart';
+import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
 
 class ExpenseModel{
   String id;
@@ -12,6 +13,18 @@ class ExpenseModel{
 
   int month;
   int year;
+
+  ExpenseModel.createNew(){
+    user_id = userRepo.currentUser.id;
+    expense_date = DateTime.now().toIso8601String();
+    category_id = "1";
+    cluster_id = '0';
+    amount = "0";
+    name = '';
+    id = null;
+  }
+
+  ExpenseModel();
 
   ExpenseModel.fromJson(jsonMap){
     try{
@@ -33,11 +46,11 @@ class ExpenseModel{
 
   Map toMap(){
     var m = Map<String, dynamic>();
-    m['id'] = int.parse(id);
+    m['id'] = id != null ? int.parse(id) : null;
     m['name'] = name;
     m['user_id'] = int.parse(user_id);
-    m['cluster_id'] = cluster_id != null ? int.parse(cluster_id) : null;
-    m['category_id'] = int.parse(category_id);
+    m['cluster'] = cluster_id;
+    m['category'] = int.parse(category_id);
     m['amount'] = int.parse(amount);
     m['expense_date'] = expense_date;
 

@@ -64,6 +64,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
                     Form(
                       key: registerFormKey,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                               margin: EdgeInsets.only(top: 40, bottom: 10),

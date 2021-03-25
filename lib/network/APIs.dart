@@ -15,4 +15,8 @@ class API{
   static String expenses_span = 'expenses/date_span';
 
   static String clusters = 'clusters';
+
+  static String cluster_change = 'expenses/change_cluster/';
+  static String cluster_remove = 'expenses/remove_cluster/';
+
 }

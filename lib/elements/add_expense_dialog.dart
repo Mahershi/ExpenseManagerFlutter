@@ -46,6 +46,9 @@ class PageState extends State<AddExpenseDialog>{
   Widget build(BuildContext context) {
     return Container(
       child: AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: borderRadius20
+        ),
         actions: [
           OutlinedButton(
             onPressed: (){

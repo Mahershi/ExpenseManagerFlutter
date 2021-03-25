@@ -30,8 +30,9 @@ class PageState extends State<ExpenseItem>{
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      padding: EdgeInsets.symmetric(vertical: widget.detail ? 20 : 10, horizontal: 20),
       // margin: EdgeInsets.all(0),
+      //   decoration: BoxDecoration(border: testBorder),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -49,6 +50,8 @@ class PageState extends State<ExpenseItem>{
                           return AddExpenseDialog(expense: widget.expense,);
                         }
                       ).then((value){
+                        if(value == null)
+                          value = false;
                         print("Value here");
                         if(value){
                           if(widget.detail){

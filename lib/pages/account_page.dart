@@ -149,9 +149,17 @@ class PageState extends StateMVC<AccountPage>{
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            AccountItem(text: "Edit Profile", myIcon: Icons.edit,),
-                            AccountItem(text: "Settings", myIcon: Icons.settings,),
-                            AccountItem(text: "Delete Account", myIcon: Icons.delete_forever,)
+                            AccountItem(text: "Edit Profile", imagePath: 'assets/img/edit.png',),
+                            InkWell(
+                              child: AccountItem(
+                                text: "My Clusters", imagePath: 'assets/img/cluster.png',
+                              ),
+                              onTap: (){
+                                Navigator.of(context).pushNamed('/Clusters');
+                              },
+                            ),
+                            AccountItem(text: "Settings", imagePath: 'assets/img/settings.png',),
+                            // AccountItem(text: "Delete Account", myIcon: Icons.delete_forever,)
                           ],
                         )
                       ),

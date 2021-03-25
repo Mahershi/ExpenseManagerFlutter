@@ -52,6 +52,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
     super.initState();
     ExpenseBloc.expEventStream.listen((event)async{
       if(event == ExpenseEvent.RefreshHome) {
+        await _con.getClusters();
         await _con.getExpenses6Months(context);
       }
       // ExpenseBloc.mapexpEventToState(event);

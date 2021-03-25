@@ -1,4 +1,5 @@
 import 'package:expensemanager/models/cluster_model.dart';
+import 'package:expensemanager/models/expense_model.dart';
 import 'package:expensemanager/network/APIs.dart';
 import 'package:expensemanager/network/rest_service.dart';
 import 'package:expensemanager/repositories/user_repo.dart';
@@ -29,6 +30,39 @@ Future<void> getClusters(context) async{
   for(var i in clusters){
     print(i.toMap().toString());
   }
+}
+
+Future<void> changeCluster(expenseid, oldclusterid, newclusterid, context) async{
+  var data = {
+    "new_cluster_id": int.parse(newclusterid),
+    "old_cluster_id": int.parse(oldclusterid),
+    "expense_id": expenseid
+  };
+
+  var resp = await RestService.request(
+    context: context,
+    endpoint: API.cluster_change,
+    data: data,
+    authRequired: false,
+    method: "POST"
+  );
+  print(resp.toString());
+}
+
+Future<void> removeExpenseFromCluster(ExpenseModel expense, context) async{
+  var data = {
+    "cluster_id": expense.cluster_id,
+    "expense_id": expense.id
+  };
+
+  var resp = await RestService.request(
+      context: context,
+      endpoint: API.cluster_remove,
+      data: data,
+      authRequired: false,
+      method: "POST"
+  );
+  print(resp.toString());
 }
 
 ClusterModel getClusterById(id){

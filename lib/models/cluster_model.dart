@@ -17,7 +17,7 @@ class ClusterModel{
     try{
       id = jsonMap['id'] != null ? jsonMap['id'].toString() : '';
       name = jsonMap['name'] ?? '';
-      expenses = jsonMap['expenses'] ?? '';
+      expenses = jsonMap['expenses'] != null ? jsonMap['expenses'].toString() : "0";
       created_date = jsonMap['created_date'] ?? '';
     }catch(e){
       print(e.toString());

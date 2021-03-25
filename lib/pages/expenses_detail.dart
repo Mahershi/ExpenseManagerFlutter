@@ -107,7 +107,7 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(left: 40, right: 40, top: 40, bottom: 10),
+                      margin: EdgeInsets.only(left: 40, right: 20, top: 40, bottom: 10),
                       child: Stack(
                         children: [
                           Column(
@@ -277,7 +277,10 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                     },
                   ).then((value){
                     print("visible");
-                    _con.getExpensesMonth(context, currentMonth+1, currentYear);
+                    if(value == null)
+                      value = false;
+                    if (value)
+                      _con.getExpensesMonth(context, currentMonth+1, currentYear);
                   });
                 },
                 child: Container(

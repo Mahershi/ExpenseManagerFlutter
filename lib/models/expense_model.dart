@@ -49,7 +49,7 @@ class ExpenseModel{
     m['id'] = id != null ? int.parse(id) : null;
     m['name'] = name;
     m['user_id'] = int.parse(user_id);
-    m['cluster'] = cluster_id;
+    // m['cluster'] = cluster_id;
     m['category'] = int.parse(category_id);
     m['amount'] = int.parse(amount);
     m['expense_date'] = expense_date;

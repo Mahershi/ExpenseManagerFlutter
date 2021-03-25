@@ -3,10 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AccountItem extends StatelessWidget{
-  IconData myIcon;
+  String imagePath;
   String text;
 
-  AccountItem({this.text, this.myIcon});
+  AccountItem({this.text, this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,11 @@ class AccountItem extends StatelessWidget{
               shape: BoxShape.circle,
               color: primaryColor
             ),
-            child: Icon(
-              myIcon,
-              size: MediaQuery.of(context).size.width * 0.06,
+            child: Image.asset(
+              imagePath,
+              width: MediaQuery.of(context).size.width * 0.05,
               color: white,
-            ),
+            )
           ),
           SizedBox(width: 20,),
           Expanded(

@@ -73,7 +73,7 @@ class RestService {
       print("response url $baseUrl$endpoint");
       var json = jsonDecode(response.toString());
       print(response.statusCode);
-      if (json['success'] == "true" || response.statusCode == 200) {
+      if (json['success'] == "true" || response.statusCode == 200 || response.statusCode == 201) {
         print("Success");
         return response.data;
       } else {

@@ -18,7 +18,7 @@ class HomeController extends ControllerMVC{
   DateTime today = DateTime.now();
 
 
-  Map<String, List<ExpenseModel>> expenses = Map<String, List<ExpenseModel>>();
+  Map<String, List<ExpenseModel>> expenseList = Map<String, List<ExpenseModel>>();
 
   HomeController();
 
@@ -112,18 +112,18 @@ class HomeController extends ControllerMVC{
   }
 
   Future<void> prepareList({days = 7}) async {
-    expenses.clear();
+    expenseList.clear();
     for(var i in exRepo.expenses){
       DateTime temp = DateTime.parse(i.expense_date);
       // print(temp.toString());
       // print(today.difference(temp) < Duration(days: days));
       if(today.difference(temp) < Duration(days: days))
       {
-        if (!expenses.containsKey(temp.toString().substring(0, 10)))
-          expenses[temp.toString().substring(0, 10)] = [];
-        expenses[temp.toString().substring(0, 10)].add(i);
+        if (!expenseList.containsKey(temp.toString().substring(0, 10)))
+          expenseList[temp.toString().substring(0, 10)] = [];
+        expenseList[temp.toString().substring(0, 10)].add(i);
         // print("Added: " + i.toMap().toString());
-        for (var j in expenses[temp.toString().substring(0, 10)])
+        for (var j in expenseList[temp.toString().substring(0, 10)])
           print(j.toMap().toString());
       }
     }

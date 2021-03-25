@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 
 class ExpenseBatchPage extends StatefulWidget{
-  HomeController con;
+  var con;
 
   ExpenseBatchPage({this.con});
   @override
@@ -28,10 +28,10 @@ class PageState extends State<ExpenseBatchPage>{
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         primary: false,
-        itemCount: widget.con.expenses.length,
+        itemCount: widget.con.expenseList.length,
         itemBuilder: (context, index){
-          String key = widget.con.expenses.keys.elementAt(index);
-          return ExpenseBatch(expenses: widget.con.expenses[key],);
+          String key = widget.con.expenseList.keys.elementAt(index);
+          return ExpenseBatch(expenses: widget.con.expenseList[key],);
         },
       ),
     );

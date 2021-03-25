@@ -167,7 +167,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                 margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                                 child: BarChart(
                                   BarChartData(
-                                    maxY: (_con.maxValue + 3000).toDouble(),
+                                    maxY: (_con.maxValue + 2000).toDouble(),
                                     barGroups: _con.rawData,
                                     titlesData:FlTitlesData(
                                         bottomTitles:SideTitles(
@@ -277,7 +277,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                             ],
                           ),
                         ),
-                        _con.expenses.isEmpty ? Container(child: NoExpenses(textColor: primaryColor,),margin: EdgeInsets.symmetric(vertical: 30),) : ExpenseBatchPage(con: _con,),
+                        _con.expenseList.isEmpty ? Container(child: NoExpenses(textColor: primaryColor,),margin: EdgeInsets.symmetric(vertical: 30),) : ExpenseBatchPage(con: _con,),
                       ],
                     )
                 ),

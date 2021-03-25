@@ -8,6 +8,28 @@ import 'package:expensemanager/repositories/user_repo.dart';
 List<ClusterModel> clusters = List<ClusterModel>();
 ClusterModel none = ClusterModel.none();
 
+Future<bool> addorModifyCluster(context, ClusterModel cluster) async{
+  String api = API.clusters + '/';
+  String method = 'POST';
+  if(cluster.id != null) {
+    api = api + '${cluster.id}/';
+    method = 'PATCH';
+  }
+
+  var data = cluster.toMap();
+
+  var resp = await RestService.request(
+    context: context,
+    endpoint: api,
+    method: method,
+    data: data,
+    authRequired: false
+  );
+  print("RESSS");
+  print(resp.toString());
+  return resp['success'] == 'true';
+}
+
 Future<void> getClusters(context) async{
   clusters.clear();
   var qp = {

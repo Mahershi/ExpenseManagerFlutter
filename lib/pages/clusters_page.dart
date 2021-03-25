@@ -1,7 +1,9 @@
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/controllers/clustercontroller.dart';
 import 'package:expensemanager/elements/back_button_app_bar.dart';
 import 'package:expensemanager/elements/cluster_item.dart';
 import 'package:expensemanager/helpers/constants.dart';
+import 'package:expensemanager/models/route_arguement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:expensemanager/repositories/cluster_repo.dart' as clusterRepo;
@@ -19,6 +21,21 @@ class PageState extends StateMVC{
   PageState() : super(ClusterController()){
     _con = controller;
   }
+
+  @override
+  void initState(){
+    super.initState();
+    ExpenseBloc.expEventStream.listen((event)async{
+      if(event == ExpenseEvent.RefreshClusterList) {
+        print("refreshing clusters");
+        await _con.fetchClusters();
+      }
+      // ExpenseBloc.mapexpEventToState(event);
+    });
+    //not needed bcz when page first appears from home page, clusters are already loaded to latest
+    // _con.fetchClusters();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +70,12 @@ class PageState extends StateMVC{
                   padding: EdgeInsets.zero,
                   itemCount: clusterRepo.clusters.length - 1,
                   itemBuilder: (context, index){
-                    return ClusterItem(cluster: clusterRepo.clusters[index + 1],);
+                    return InkWell(
+                      onTap: (){
+                       Navigator.of(context).pushNamed('/ClusterDetail', arguments: RouteArgument(param: clusterRepo.clusters[index + 1]));
+                      },
+                      child: ClusterItem(cluster: clusterRepo.clusters[index + 1],)
+                    );
                   },
                 )
               ),

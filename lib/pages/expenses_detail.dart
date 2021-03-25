@@ -271,7 +271,8 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                       e.category_id = '1';
                       e.name = '';
                       e.amount = '0';
-                      e.expense_date = DateTime(currentYear, currentMonth+1, DateTime.now().day).toString();
+                      DateTime time = DateTime.now();
+                      e.expense_date = DateTime(currentYear, currentMonth+1, DateTime.now().day, time.hour, time.minute, time.second).toString();
                       e.user_id = currentUser.id;
                       return AddExpenseDialog(expense: e, title: "Add Expense",);
                     },

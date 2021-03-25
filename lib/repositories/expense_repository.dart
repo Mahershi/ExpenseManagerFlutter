@@ -16,7 +16,7 @@ int latest_year = 0;
 int oldest_month = 0;
 int oldest_year = 0;
 
-Future<void> getExpensesDynamicQP(context, {qp = const {}}) async{
+Future<dynamic> getExpensesDynamicQP(context, {qp = const {}, returnOrNot = false}) async{
   var resp = await RestService.request(
     context: context,
     endpoint: API.expenses,
@@ -34,6 +34,9 @@ Future<void> getExpensesDynamicQP(context, {qp = const {}}) async{
     }
   }
   print("expences calculater");
+  if(returnOrNot){
+    return resp['data'];
+  }
 }
 
 Future<void> getSpan(context, {qp = const {}}) async{

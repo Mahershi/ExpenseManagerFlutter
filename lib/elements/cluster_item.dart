@@ -1,7 +1,10 @@
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
+import 'package:expensemanager/elements/cluster_edit.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/cluster_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:expensemanager/repositories/cluster_repo.dart' as clusterRepo;
 
 class ClusterItem extends StatefulWidget{
   ClusterModel cluster;
@@ -12,29 +15,55 @@ class ClusterItem extends StatefulWidget{
 }
 
 class PageState extends State<ClusterItem>{
+  SlidableController slidableController = SlidableController();
   @override
   Widget build(BuildContext context) {
     return Slidable(
+      controller: slidableController,
       secondaryActions: [
-        Container(
-            margin: EdgeInsets.symmetric(vertical: 10,),
-            decoration: BoxDecoration(
-              // borderRadius: BorderRadius.only(topRight: radius20, bottomRight: radius20),
-                borderRadius: borderRadius20,
-                color: white
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Icon(
-                  Icons.edit,
-                  color: black,
-                  size: MediaQuery.of(context).size.width * 0.08,
-                ),
-              ],
-            )
+        InkWell(
+          onTap: (){
+            showDialog(
+              context: context,
+              builder: (context){
+                return ClusterEditDialog(cluster: widget.cluster,);
+              }
+            ).then((value) async{
+              slidableController.activeState.close();
+              print("value from dialog: " + value.toString());
+              if(value != null) {
+                if(value != false){
+                  print(value.toMap().toString());
+                  await clusterRepo.addorModifyCluster(context, value).then((value) async{
+                    print("Re"+value.toString() );
+                    if(value){
+                      ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterList);
+                    }
+                  });
+                }
+              }
+            });
+          },
+          child: Container(
+              margin: EdgeInsets.symmetric(vertical: 10,),
+              decoration: BoxDecoration(
+                // borderRadius: BorderRadius.only(topRight: radius20, bottomRight: radius20),
+                  borderRadius: borderRadius20,
+                  color: white
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Icon(
+                    Icons.edit,
+                    color: black,
+                    size: MediaQuery.of(context).size.width * 0.08,
+                  ),
+                ],
+              )
 
+          ),
         ),
         Container(
           margin: EdgeInsets.symmetric(vertical: 10,),

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:expensemanager/controllers/expensedetail_controller.dart';
 
-enum ExpenseEvent{RefreshExpenseDetail, RefreshHome, RefreshBatch}
+enum ExpenseEvent{RefreshExpenseDetail, RefreshHome, RefreshBatch, RefreshClusterList}
 
 class ExpenseBloc{
   static ExpenseDetailController controller;
@@ -18,6 +18,9 @@ class ExpenseBloc{
   static final homeStateSink = expStateController.sink;
   static final homeStateStream = expStateController.stream;
 
+  static final clStateController = StreamController<int>.broadcast();
+  static final clStateSink = expStateController.sink;
+  static final clStateStream = expStateController.stream;
 
   static void mapexpEventToState(ExpenseEvent event){
     // if(event == ExpenseEvent.RefreshExpenseDetail){

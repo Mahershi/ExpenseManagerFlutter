@@ -1,4 +1,5 @@
 import 'package:expensemanager/pages/account_page.dart';
+import 'package:expensemanager/pages/clusterdetail_page.dart';
 import 'package:expensemanager/pages/clusters_page.dart';
 import 'package:expensemanager/pages/expenses_detail.dart';
 import 'package:expensemanager/pages/home_page.dart';
@@ -23,6 +24,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => AccountPage());
       case '/Clusters':
         return MaterialPageRoute(builder: (_) => ClusterPage());
+      case '/ClusterDetail':
+        return MaterialPageRoute(builder: (_) => ClusterDetail(routeArgument: args,));
       default:
         return MaterialPageRoute(builder: (_) => Scaffold(body: SafeArea(child: Text('Route Error'))));
     }

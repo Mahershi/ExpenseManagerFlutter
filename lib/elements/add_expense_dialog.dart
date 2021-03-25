@@ -41,6 +41,7 @@ class PageState extends State<AddExpenseDialog>{
     currentCategory = widget.expense.category_id;
     currentCluster = widget.expense.cluster_id ?? '0';
     selectedDateString = selected.toIso8601String();
+    print(selectedDateString);
   }
   @override
   Widget build(BuildContext context) {

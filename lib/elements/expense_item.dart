@@ -47,7 +47,7 @@ class PageState extends State<ExpenseItem>{
                       showDialog(
                         context: context,
                         builder: (context){
-                          return AddExpenseDialog(expense: widget.expense,);
+                          return AddExpenseDialog(expense: widget.expense, title: "Edit Expense",);
                         }
                       ).then((value){
                         if(value == null)

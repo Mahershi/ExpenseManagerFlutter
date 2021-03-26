@@ -49,15 +49,11 @@ Future<void> saveToSP() async{
   SharedPreferences _pref = await SharedPreferences.getInstance();
   String s = json.encode(currentUser.saveToSP());
   _pref.setString('user', json.encode(currentUser.saveToSP()));
-  print("Saved User to SP");
-  print(s);
 }
 
 Future<void> getFromSP() async{
   SharedPreferences pref = await SharedPreferences.getInstance();
   var user = await pref.get('user');
   currentUser = UserModel.fromJson(json.decode(user));
-  print("Fetched User from SP");
-  print(currentUser.saveToSP().toString());
 }
 

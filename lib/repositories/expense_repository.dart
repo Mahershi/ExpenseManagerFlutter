@@ -33,7 +33,6 @@ Future<dynamic> getExpensesDynamicQP(context, {qp = const {}, returnOrNot = fals
       expenses.add(expense);
     }
   }
-  print("expences calculater");
   if(returnOrNot){
     return resp['data'];
   }
@@ -59,6 +58,9 @@ Future<void> getSpan(context, {qp = const {}}) async{
   }
 }
 
+
+//when modifying existing expense, server will ignore "cluster" key.
+//cluster can only be changed by its specific API
 Future<bool> saveExpense(ExpenseModel expense, context) async{
   String api = API.expenses + '/';
   String method = 'POST';
@@ -67,10 +69,7 @@ Future<bool> saveExpense(ExpenseModel expense, context) async{
     method = 'PATCH';
   }
 
-  // print(api);
   var data = expense.toMap();
-  // print("TO Send");
-  // print(data.toString());
 
   var resp = await RestService.request(
     context: context,
@@ -79,10 +78,7 @@ Future<bool> saveExpense(ExpenseModel expense, context) async{
     method: method,
     authRequired: false,
   );
-  // print("\n\nResponse:1111");
-  // print(resp['data'].toString());
   if(resp['success'] == 'true'){
-    print("Returning True");
     return true;
   }
   return false;

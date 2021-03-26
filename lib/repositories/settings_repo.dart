@@ -16,7 +16,6 @@ Future<bool> testConnection(context) async{
       endpoint: API.test,
       authRequired: false
   );
-  print(resp.toString());
   if(resp['success'] == 'true'){
     return true;
   }
@@ -35,9 +34,6 @@ Future<void> getCategories(context) async{
       var c = CategoryModel.fromJson(i);
       categories.add(c);
     }
-  }
-  for(var i in categories){
-    print(i.toMap().toString());
   }
 }
 

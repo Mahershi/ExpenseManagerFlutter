@@ -2,10 +2,10 @@ import 'package:expensemanager/helpers/constants.dart';
 import 'package:flutter/cupertino.dart';
 
 class NoExpenses extends StatelessWidget{
-  String text = "No Expenses Found!";
+  String text;
   Color textColor;
 
-  NoExpenses({this.textColor});
+  NoExpenses({this.textColor, this.text="No Expenses Found!"});
   @override
   Widget build(BuildContext context) {
     return Container(

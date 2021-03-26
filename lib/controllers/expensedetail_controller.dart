@@ -17,10 +17,7 @@ class ExpenseDetailController extends ControllerMVC{
   Map<String, List<ExpenseModel>> expenseList = Map<String, List<ExpenseModel>>();
 
   ExpenseDetailController(){
-    // print(exRepo.latest_month+1);
     monthsLocal = monthsLocal.sublist(1, exRepo.latest_month+1);
-    // print(monthsLocal.toString());
-
     for(var i = exRepo.oldest_year; i<=exRepo.latest_year; i++){
       yearLocal.add(i.toString());
     }

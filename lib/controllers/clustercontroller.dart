@@ -13,28 +13,27 @@ class ClusterController extends ControllerMVC{
   ClusterModel currentCluster;
   List<ExpenseModel> expenses = [];
   Map<String, List<ExpenseModel>> expenseList = Map<String, List<ExpenseModel>>();
+  int total = 0;
 
-  Future<void> getExpensesForClusterId(clusterId) async{
+  Future<void> getExpensesForClusterId(context, clusterId) async{
+
     var qp = {
       'cluster': clusterId,
       'user_id': currentUser.id
     };
-    var data = await exRepo.getExpensesDynamicQP(this.stateMVC.context, qp: qp, returnOrNot: true);
-
-    print("GOT DATA");
-    print(data.toString());
-
+    var data = await exRepo.getExpensesDynamicQP(context, qp: qp, returnOrNot: true);
+    expenses.clear();
     for (var ex in data){
       ExpenseModel e = ExpenseModel.fromJson(ex);
       expenses.add(e);
     }
-
+    calculateTotal();
     prepareList();
   }
 
-  Future<void> fetchClusters() async{
+  Future<void> fetchClusters(context) async{
     print("fetching");
-    await clusterRepo.getClusters(this.stateMVC.context);
+    await clusterRepo.getClusters(context);
     setState(() { });
   }
 
@@ -66,10 +65,14 @@ class ClusterController extends ControllerMVC{
       if (!expenseList.containsKey(temp.toString().substring(0, 10)))
         expenseList[temp.toString().substring(0, 10)] = [];
       expenseList[temp.toString().substring(0, 10)].add(i);
-      // print("Added: " + i.toMap().toString());
-      for (var j in expenseList[temp.toString().substring(0, 10)])
-        print(j.toMap().toString());
     }
     setState(() { });
+  }
+
+  Future<void> calculateTotal() async{
+    total = 0;
+    for (var ex in expenses){
+      total += int.parse(ex.amount);
+    }
   }
 }

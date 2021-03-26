@@ -20,18 +20,18 @@ class RestService {
 
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      print("Request Data ${options.data}");
-      print("RequestPath ${options.path}");
-      print("Request QP ${options.queryParameters}");
-      print("RequestORP ${options.onReceiveProgress}");
+      // print("Request Data ${options.data}");
+      // print("RequestPath ${options.path}");
+      // print("Request QP ${options.queryParameters}");
+      // print("RequestORP ${options.onReceiveProgress}");
       return options; //continue
     }, onResponse: (Response response) async {
-      print("Response DATA${response.data}");
+      // print("Response DATA${response.data}");
       return response; // continue
     }, onError: (DioError e) async {
-      print("Calling EMSG${e.message}");
-      print("Calling ETYPE${e.type}");
-      print("Calling ERES${e.response}");
+      // print("Calling EMSG${e.message}");
+      // print("Calling ETYPE${e.type}");
+      // print("Calling ERES${e.response}");
       // Do something with response error
       return e; //continue
     }));
@@ -45,12 +45,12 @@ class RestService {
         bool authRequired = true,
         Map<String, dynamic> queryParameters = const {},
         dynamic data = const {},
-        bool showErrorInSnackBar = false,
+        bool showError = false,
         bool showLoader = true,
-        bool isShowSuccessMsg = false}) async {
+        bool showSuccess = false}) async {
     try {
       if (AppConfig.config.environment == 'development') {
-        print('Calling: ${method.padLeft(4, ' ')} $endpoint');
+        // print('Calling: ${method.padLeft(4, ' ')} $endpoint');
       }
       String language = 'es';
 
@@ -61,7 +61,7 @@ class RestService {
         'authrequired': authRequired
       };
 
-      print(_cacheOptions.headers.toString());
+      // print(_cacheOptions.headers.toString());
       Response<dynamic> response = await dio.request(
         '$endpoint',
         data: data,
@@ -70,14 +70,20 @@ class RestService {
       );
 
       var apiResponJson = response.data;
-      print("response url $baseUrl$endpoint");
       var json = jsonDecode(response.toString());
-      print(response.statusCode);
+      // print(response.statusCode);
       if (json['success'] == "true" || response.statusCode == 200 || response.statusCode == 201) {
-        print("Success");
+        // print("Success");
+        if(showSuccess && context != null){
+          CustomToast(context: context, msg: response.data['message'] ?? "", msgColor: primaryColor).showToast();
+        }
         return response.data;
       } else {
-        print("Server Error");
+        // print("Server Error");
+        if(showSuccess && context != null){
+          var err = response.data['error'] ?? "";
+          CustomToast(context: context, msg: err is String ? err : "", msgColor: primaryColor).showToast();
+        }
         return response.data;
       }
     } on DioError catch (e) {
@@ -99,7 +105,7 @@ class RestService {
           erMsg2 = l[0]['message'][0].toString();
         }
       }
-      print(erMsg2.runtimeType);
+      // print(erMsg2.runtimeType);
       CustomToast(context: context, msg: erMsg2 == '' ? erMsg : erMsg2, msgColor: red,).showToast();
       return {
         "success": "false",

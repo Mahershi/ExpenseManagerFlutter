@@ -1,6 +1,7 @@
 import 'package:expensemanager/helpers/custom_trace.dart';
 import 'package:expensemanager/network/APIs.dart';
 import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
+import 'package:expensemanager/repositories/user_repo.dart';
 
 class ExpenseModel{
   String id;
@@ -14,14 +15,36 @@ class ExpenseModel{
   int month;
   int year;
 
+  //for creating without datetime timezone
   ExpenseModel.createNew(){
     user_id = userRepo.currentUser.id;
     expense_date = DateTime.now().toIso8601String();
     category_id = "1";
     cluster_id = '0';
-    amount = "0";
+    amount = "";
     name = '';
     id = null;
+  }
+
+  ExpenseModel.createFor(monthLocal, yearLocal){
+    id = null;
+    cluster_id = '0';
+    category_id = '1';
+    name = '';
+    amount = '';
+    DateTime time = DateTime.now();
+    expense_date = DateTime(yearLocal, monthLocal, DateTime.now().day, time.hour, time.minute, time.second).toString();
+    user_id = currentUser.id;
+  }
+
+  ExpenseModel.createForCluster(clusterId){
+    id = null;
+    cluster_id = clusterId;
+    category_id = '1';
+    name = '';
+    amount = '';
+    expense_date = DateTime.now().toIso8601String();
+    user_id = currentUser.id;
   }
 
   ExpenseModel();
@@ -44,16 +67,21 @@ class ExpenseModel{
     }
   }
 
+
+  //when modifying existing expense, server will ignore "cluster" key.
+  //cluster can only be changed by its specific API
   Map toMap(){
     var m = Map<String, dynamic>();
     m['id'] = id != null ? int.parse(id) : null;
     m['name'] = name;
     m['user_id'] = int.parse(user_id);
-    // m['cluster'] = cluster_id;
+    m['cluster'] = cluster_id;
     m['category'] = int.parse(category_id);
     m['amount'] = int.parse(amount);
     m['expense_date'] = expense_date;
 
     return m;
   }
+
+
 }

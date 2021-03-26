@@ -337,74 +337,74 @@ class PageState extends State<AddExpenseDialog>{
 
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Container(
-                            child: Text(
-                              "Cluster",
-                              style: font.merge(
-                                  TextStyle(
-                                      fontWeight: FontWeight.w300,
-                                      color: grey,
-                                      fontSize: MediaQuery.of(context).size.width * 0.04
-                                  )
-                              ),
-                            )
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                            margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                            child: DropdownButton(
-                              isExpanded: true,
-                              value: currentCluster,
-                              items: clusterRepo.clusters.map((e){
-                                print(e.name);
-                                return DropdownMenuItem(
-                                  value: e.id,
-                                  child: Text(
-                                    e.name,
-                                    style: font.merge(
-                                        TextStyle(
-                                            fontSize: MediaQuery.of(context).size.width * 0.035,
-                                            color: primaryColor,
-                                            fontWeight: FontWeight.w600
-                                        )
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value){
-                                currentCluster = value;
-                                setState(() {
-
-                                });
-                              },
-                              underline: Container(
-                                height: 1,
-                                color: primaryColor,
-                              ),
-                              icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor,),
-
-                            )
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    child: Text(
-                      "To add to a new cluster, first create a new cluster",
-                      style: font.merge(
-                        TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.025,
-                          color: grey
-                        )
-                      ),
-                      textAlign: TextAlign.justify,
-                    )
-                  )
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Expanded(
+                  //       child: Container(
+                  //           child: Text(
+                  //             "Cluster",
+                  //             style: font.merge(
+                  //                 TextStyle(
+                  //                     fontWeight: FontWeight.w300,
+                  //                     color: grey,
+                  //                     fontSize: MediaQuery.of(context).size.width * 0.04
+                  //                 )
+                  //             ),
+                  //           )
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: Container(
+                  //           margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
+                  //           child: DropdownButton(
+                  //             isExpanded: true,
+                  //             value: currentCluster,
+                  //             items: clusterRepo.clusters.map((e){
+                  //               print(e.name);
+                  //               return DropdownMenuItem(
+                  //                 value: e.id,
+                  //                 child: Text(
+                  //                   e.name,
+                  //                   style: font.merge(
+                  //                       TextStyle(
+                  //                           fontSize: MediaQuery.of(context).size.width * 0.035,
+                  //                           color: primaryColor,
+                  //                           fontWeight: FontWeight.w600
+                  //                       )
+                  //                   ),
+                  //                 ),
+                  //               );
+                  //             }).toList(),
+                  //             onChanged: (value){
+                  //               currentCluster = value;
+                  //               setState(() {
+                  //
+                  //               });
+                  //             },
+                  //             underline: Container(
+                  //               height: 1,
+                  //               color: primaryColor,
+                  //             ),
+                  //             icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor,),
+                  //
+                  //           )
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // Container(
+                  //   child: Text(
+                  //     "To add to a new cluster, first create a new cluster",
+                  //     style: font.merge(
+                  //       TextStyle(
+                  //         fontSize: MediaQuery.of(context).size.width * 0.025,
+                  //         color: grey
+                  //       )
+                  //     ),
+                  //     textAlign: TextAlign.justify,
+                  //   )
+                  // )
                 ],
               ),
             ),

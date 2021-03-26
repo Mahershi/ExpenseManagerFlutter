@@ -23,15 +23,14 @@ Future<bool> addorModifyCluster(context, ClusterModel cluster) async{
     endpoint: api,
     method: method,
     data: data,
-    authRequired: false
+    authRequired: false,
+    showSuccess: true,
+    showError: true
   );
-  print("RESSS");
-  print(resp.toString());
   return resp['success'] == 'true';
 }
 
 Future<void> getClusters(context) async{
-  clusters.clear();
   var qp = {
     'user_id': currentUser.id
   };
@@ -43,15 +42,13 @@ Future<void> getClusters(context) async{
       queryParameters: qp
   );
   if(resp['success'] == 'true'){
+    clusters.clear();
     for(var i in resp['data']){
       var c = ClusterModel.fromJson(i);
       clusters.add(c);
     }
   }
   clusters.insert(0, none);
-  for(var i in clusters){
-    print(i.toMap().toString());
-  }
 }
 
 Future<void> changeCluster(expenseid, oldclusterid, newclusterid, context) async{
@@ -66,9 +63,10 @@ Future<void> changeCluster(expenseid, oldclusterid, newclusterid, context) async
     endpoint: API.cluster_change,
     data: data,
     authRequired: false,
-    method: "POST"
+    method: "POST",
+    showSuccess: true,
+    showError: true
   );
-  print(resp.toString());
 }
 
 Future<void> removeExpenseFromCluster(ExpenseModel expense, context) async{
@@ -84,7 +82,24 @@ Future<void> removeExpenseFromCluster(ExpenseModel expense, context) async{
       authRequired: false,
       method: "POST"
   );
+}
+
+Future<bool> deleteCluster(clusterID, context) async{
+  String api = API.clusters;
+  api += "/$clusterID/";
+  String method = 'DELETE';
+
+  var resp = await RestService.request(
+    context: context,
+    endpoint: api,
+    method: method,
+    authRequired: false,
+    showSuccess: true,
+    showError: true
+  );
+
   print(resp.toString());
+  return resp['success'] == 'true';
 }
 
 ClusterModel getClusterById(id){

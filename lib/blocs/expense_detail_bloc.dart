@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:expensemanager/controllers/expensedetail_controller.dart';
 
-enum ExpenseEvent{RefreshExpenseDetail, RefreshHome, RefreshBatch, RefreshClusterList}
+enum ExpenseEvent{RefreshExpenseDetail, RefreshHome, RefreshBatch, RefreshClusterList, RefreshClusterDetail}
 
 class ExpenseBloc{
   static ExpenseDetailController controller;

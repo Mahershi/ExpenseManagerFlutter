@@ -265,15 +265,15 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                   showDialog(
                     context: context,
                     builder: (context){
-                      ExpenseModel e = ExpenseModel();
-                      e.id = null;
-                      e.cluster_id = '0';
-                      e.category_id = '1';
-                      e.name = '';
-                      e.amount = '0';
-                      DateTime time = DateTime.now();
-                      e.expense_date = DateTime(currentYear, currentMonth+1, DateTime.now().day, time.hour, time.minute, time.second).toString();
-                      e.user_id = currentUser.id;
+                      ExpenseModel e = ExpenseModel.createFor(currentMonth+1, currentYear);
+                      // e.id = null;
+                      // e.cluster_id = '0';
+                      // e.category_id = '1';
+                      // e.name = '';
+                      // e.amount = '0';
+                      // DateTime time = DateTime.now();
+                      // e.expense_date = DateTime(currentYear, currentMonth+1, DateTime.now().day, time.hour, time.minute, time.second).toString();
+                      // e.user_id = currentUser.id;
                       return AddExpenseDialog(expense: e, title: "Add Expense",);
                     },
                   ).then((value){

@@ -118,12 +118,12 @@ class PageState extends State<ExpenseBatch>{
   void calculateTotal(){
     total = 0;
     for(var i in widget.expenses){
-      print("Total: " + total.toString());
+      // print("Total: " + total.toString());
       total += int.parse(i.amount);
-      print("Total: " + total.toString());
+      // print("Total: " + total.toString());
     }
     setState(() {
-      print(" Set Total: " + total.toString());
+      // print(" Set Total: " + total.toString());
     });
   }
 }

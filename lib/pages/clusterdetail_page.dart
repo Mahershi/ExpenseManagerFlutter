@@ -1,8 +1,13 @@
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/controllers/clustercontroller.dart';
+import 'package:expensemanager/elements/add_expense_dialog.dart';
+import 'package:expensemanager/elements/no_expenses.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/cluster_model.dart';
+import 'package:expensemanager/models/expense_model.dart';
 import 'package:expensemanager/models/route_arguement.dart';
 import 'package:expensemanager/pages/expense_batch_page.dart';
+import 'package:expensemanager/repositories/user_repo.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -28,8 +33,12 @@ class PageState extends StateMVC<ClusterDetail>{
     super.initState();
     cluster = widget.routeArgument.param as ClusterModel;
     _con.currentCluster = cluster;
-    _con.getExpensesForClusterId(_con.currentCluster.id);
-
+    _con.getExpensesForClusterId(context, _con.currentCluster.id);
+    ExpenseBloc.expEventStream.listen((event){
+      if(event == ExpenseEvent.RefreshClusterDetail){
+        _con.getExpensesForClusterId(context, _con.currentCluster.id);
+      }
+    });
   }
 
   @override
@@ -90,7 +99,7 @@ class PageState extends StateMVC<ClusterDetail>{
                             visible: true,
                             child: Container(
                                 child: Text(
-                                  "₹ " + ("5000"),
+                                  "₹ " + (_con.total.toString()),
                                   style: font.merge(
                                       TextStyle(
                                           fontSize: MediaQuery.of(context).size.width * 0.045,
@@ -109,6 +118,7 @@ class PageState extends StateMVC<ClusterDetail>{
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
+                width: MediaQuery.of(context).size.width,
                 padding: EdgeInsets.only(top: 20),
                 height: MediaQuery.of(context).size.height * 0.9 - 40,
                 decoration: BoxDecoration(
@@ -118,8 +128,43 @@ class PageState extends StateMVC<ClusterDetail>{
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _con.expenseList.isNotEmpty ? ExpenseBatchPage(con: _con) : Container(),
+                      _con.expenseList.isNotEmpty ? ExpenseBatchPage(con: _con) : NoExpenses(textColor: primaryColor,),
                     ],
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: InkWell(
+                onTap: (){
+                  showDialog(
+                    context: context,
+                    builder: (context){
+                      ExpenseModel e = ExpenseModel.createForCluster(cluster.id);
+                      return AddExpenseDialog(expense: e, title: "Add Expense",);
+                    },
+                  ).then((value){
+                    print("visible");
+                    if(value == null)
+                      value = false;
+                    if(value){
+                      ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterDetail);
+                    }
+                  });
+                },
+                child: Container(
+                  margin: EdgeInsets.all(20),
+                  padding: EdgeInsets.all(12),
+                  width: MediaQuery.of(context).size.width * 0.22,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: primaryColor
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    size: MediaQuery.of(context).size.width * 0.08,
+                    color: white,
                   ),
                 ),
               ),

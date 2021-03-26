@@ -31,7 +31,6 @@ class HomeController extends ControllerMVC{
     String todayString = today.year.toString() + "-" + today.month.toString() + '-' + '30';
     today = DateTime(today.year, today.month-6, 1);
     String spanString = today.year.toString() + "-" + (today.month).toString() + '-' + today.day.toString();
-    // print(todayString + "," + spanString);
 
     var qp = {
       'start': spanString,
@@ -40,8 +39,6 @@ class HomeController extends ControllerMVC{
     };
 
     await exRepo.getExpensesDynamicQP(context, qp: qp);
-
-    // currentMonth = exRepo.expenses.isNotEmpty ? exRepo.expenses.first.month : DateTime.now().month;
     await prepareList();
     makeDataSets(context);
   }
@@ -52,7 +49,6 @@ class HomeController extends ControllerMVC{
     dataBarGraph.clear();
     rawData = [];
     for(var ex in exRepo.expenses){
-      // print(ex.month.toString() + ", " + ex.year.toString());
       dataBarGraph[ex.month] = {
         'amount': 0,
         'year': ex.year
@@ -96,9 +92,7 @@ class HomeController extends ControllerMVC{
       }
     }
     if(this.stateMVC.mounted) {
-      setState(() {
-        // print("setting state: " + exRepo.expenses.isEmpty.toString());
-      });
+      setState(() {});
     }
   }
 
@@ -115,16 +109,11 @@ class HomeController extends ControllerMVC{
     expenseList.clear();
     for(var i in exRepo.expenses){
       DateTime temp = DateTime.parse(i.expense_date);
-      // print(temp.toString());
-      // print(today.difference(temp) < Duration(days: days));
       if(today.difference(temp) < Duration(days: days))
       {
         if (!expenseList.containsKey(temp.toString().substring(0, 10)))
           expenseList[temp.toString().substring(0, 10)] = [];
         expenseList[temp.toString().substring(0, 10)].add(i);
-        // print("Added: " + i.toMap().toString());
-        for (var j in expenseList[temp.toString().substring(0, 10)])
-          print(j.toMap().toString());
       }
     }
   }

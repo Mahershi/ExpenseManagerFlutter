@@ -15,11 +15,12 @@ class CustomToast{
   }
 
   showToast(){
-    fToast.showToast(
-      child: getToastWidget(),
-      gravity: ToastGravity.TOP,
-      toastDuration: duration
-    );
+    if (msg != null || msg != "") {
+      fToast.showToast(
+          child: getToastWidget(),
+          gravity: ToastGravity.TOP,
+          toastDuration: duration);
+    }
   }
 
   Container getToastWidget(){
@@ -31,7 +32,7 @@ class CustomToast{
         color: white.withOpacity(0.92)
       ),
       child: Text(
-        msg,
+        msg ?? "",
         style: font.merge(
           TextStyle(
             fontSize: MediaQuery.of(context).size.width * 0.035,

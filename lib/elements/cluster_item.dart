@@ -1,5 +1,7 @@
 import 'package:expensemanager/blocs/expense_detail_bloc.dart';
+import 'package:expensemanager/elements/SlidableIconButton.dart';
 import 'package:expensemanager/elements/cluster_edit.dart';
+import 'package:expensemanager/elements/confirm_alert.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/cluster_model.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,7 @@ class PageState extends State<ClusterItem>{
                   await clusterRepo.addorModifyCluster(context, value).then((value) async{
                     print("Re"+value.toString() );
                     if(value){
+                      print("here1");
                       ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterList);
                     }
                   });
@@ -44,46 +47,28 @@ class PageState extends State<ClusterItem>{
               }
             });
           },
-          child: Container(
-              margin: EdgeInsets.symmetric(vertical: 10,),
-              decoration: BoxDecoration(
-                // borderRadius: BorderRadius.only(topRight: radius20, bottomRight: radius20),
-                  borderRadius: borderRadius20,
-                  color: white
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Icon(
-                    Icons.edit,
-                    color: black,
-                    size: MediaQuery.of(context).size.width * 0.08,
-                  ),
-                ],
-              )
-
-          ),
+          child: SlidableIconButton(myIcon: Icons.edit, iconSize: MediaQuery.of(context).size.width * 0.08,)
         ),
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 10,),
-          decoration: BoxDecoration(
-            // borderRadius: BorderRadius.only(topRight: radius20, bottomRight: radius20),
-            borderRadius: borderRadius20,
-            color: white
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Icon(
-                Icons.delete,
-                color: black,
-                size: MediaQuery.of(context).size.width * 0.08,
-              ),
-            ],
-          )
-        ),
+        InkWell(
+          onTap: (){
+            showDialog(
+              context: context,
+              builder: (context){
+                return ConfirmAlert(title: "Delete Cluster?", tag: "This will delete the cluster and all the expenses under it",);
+              }
+            ).then((value) async {
+              if(value != null){
+                if(value){
+                  slidableController.activeState.close();
+                  await clusterRepo.deleteCluster(widget.cluster.id, context);
+                  print("here");
+                  ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterList);
+                }
+              }
+            });
+          },
+          child: SlidableIconButton(myIcon: Icons.delete, iconSize: MediaQuery.of(context).size.width * 0.08,)
+        )
       ],
       actionPane: SlidableDrawerActionPane(),
       actionExtentRatio: 0.25,
@@ -145,17 +130,17 @@ class PageState extends State<ClusterItem>{
                 ],
               ),
             ),
-            Container(
-                child: Text(
-                  "₹ 5600",
-                  style: font.merge(
-                      TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.05,
-                          color: white
-                      )
-                  ),
-                )
-            ),
+            // Container(
+            //     child: Text(
+            //       "₹ 5600",
+            //       style: font.merge(
+            //           TextStyle(
+            //               fontSize: MediaQuery.of(context).size.width * 0.05,
+            //               color: white
+            //           )
+            //       ),
+            //     )
+            // ),
           ],
         ),
       ),

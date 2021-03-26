@@ -34,7 +34,7 @@ class PageState extends State<ClusterEditDialog>{
             Navigator.of(context).pop(false);
           },
           bgColor: red,
-          textColor: white,
+          textColor: accentColor,
         ),
         SizedBox(
           width: 5,
@@ -46,7 +46,7 @@ class PageState extends State<ClusterEditDialog>{
             Navigator.of(context).pop(widget.cluster);
           },
           bgColor: primaryColor,
-          textColor: white,
+          textColor: accentColor,
         ),
       ],
       title: Text(

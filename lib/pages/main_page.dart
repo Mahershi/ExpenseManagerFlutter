@@ -32,7 +32,7 @@ class PageState extends State<MainPage>{
               child: Container(
                 margin: EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: currentPage == home ? primaryColor : white,
+                  color: currentPage == home ? primaryColor : accentColor,
                   borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height * 0.04)
                 ),
                 height: MediaQuery.of(context).size.height * 0.08,
@@ -52,7 +52,7 @@ class PageState extends State<MainPage>{
                           children: [
                             Icon(
                               Icons.home_rounded,
-                              color: currentPage == home ? white : primaryColor,
+                              color: currentPage == home ? accentColor : primaryColor,
                               size: MediaQuery.of(context).size.width * 0.07,
                             )
                           ],
@@ -72,7 +72,7 @@ class PageState extends State<MainPage>{
                             children: [
                               Icon(
                                 Icons.home_rounded,
-                                color: currentPage == home ? white : primaryColor,
+                                color: currentPage == home ? accentColor : primaryColor,
                                 size: MediaQuery.of(context).size.width * 0.07,
                               )
                             ],
@@ -92,7 +92,7 @@ class PageState extends State<MainPage>{
                             children: [
                               Icon(
                                 Icons.home_rounded,
-                                color: currentPage == home ? white : primaryColor,
+                                color: currentPage == home ? accentColor : primaryColor,
                                 size: MediaQuery.of(context).size.width * 0.07,
                               )
                             ],
@@ -112,7 +112,7 @@ class PageState extends State<MainPage>{
                             children: [
                               Icon(
                                 Icons.account_circle_rounded,
-                                color: currentPage == home ? white : primaryColor,
+                                color: currentPage == home ? accentColor : primaryColor,
                                 size: MediaQuery.of(context).size.width * 0.07,
                               )
                             ],

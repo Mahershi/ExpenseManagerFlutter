@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // INT
@@ -19,16 +20,41 @@ Radius radius30 = Radius.circular(30);
 
 TextStyle font = GoogleFonts.comfortaa();
 
+List<Color> primaryColors = [
+  Color(0xFF348275),
+  Color(0xFF2D303E),
+  Color(0xFF7484FE),
+];
+
+List<Color> secondColors = [
+  Color(0xFF70A79E),
+  Color(0xFF6c6e77),
+  Color(0xFF9da8fe)
+];
+
+List<Color> accentColors = [
+  Colors.white,
+  Colors.white,
+  Colors.white
+
+];
+
+List<Color> barColors = [
+  Color(0xFFEF8767),
+  Color(0xFFEF8767),
+  Colors.white
+];
+
 // COLORS
-const Color primaryColor = Color(0xFF348275);
+Color primaryColor = Color(0xFF348275);
 Color secondColor = Color(0xFF759D7A);
-Color white = Colors.white;
+Color accentColor = Colors.white;
 Color red = Colors.red;
 Color black = Colors.black;
 Color grey = Colors.grey;
 Color orange = Colors.orangeAccent;
 Color yellow = Colors.yellowAccent;
-Color pinkShade = Color(0xFFEF8767);
+Color barColor = Color(0xFFEF8767);
 
 // MONTHS
 List<String> weekDay = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

@@ -32,7 +32,7 @@ class PageState extends State<ExpenseMainBatch>{
             padding: EdgeInsets.all(12),
             margin: EdgeInsets.symmetric(vertical: 10),
             decoration: BoxDecoration(
-              color: white,
+              color: accentColor,
               borderRadius: BorderRadius.only(topRight: radius12, bottomRight: radius12)
             ),
             child: Text(
@@ -51,7 +51,7 @@ class PageState extends State<ExpenseMainBatch>{
             physics: new NeverScrollableScrollPhysics(),
             itemCount: widget.expenses.length,
             itemBuilder: (context, index){
-              return ExpenseItem(expense: widget.expenses[index], textColor: white, detail: true,);
+              return ExpenseItem(expense: widget.expenses[index], textColor: accentColor, detail: true,);
             },
           ),
 

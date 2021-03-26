@@ -8,7 +8,7 @@ class BackbuttonAppBar extends StatelessWidget{
   Color color;
   Function action;
 
-  BackbuttonAppBar({this.heading = '', this.color=primaryColor ,this.tag = null, this.action = null});
+  BackbuttonAppBar({this.heading = '', this.color ,this.tag, this.action});
   @override
   Widget build(BuildContext context) {
     return Container(

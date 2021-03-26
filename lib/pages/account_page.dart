@@ -57,12 +57,12 @@ class PageState extends StateMVC<AccountPage>{
                           child: Container(
                               padding: EdgeInsets.all(5),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: white),
+                                  border: Border.all(color: accentColor),
                                   borderRadius: borderRadius12
                               ),
                               child: Icon(
                                 Icons.chevron_left,
-                                color: white,
+                                color: accentColor,
                               )
                           ),
                         ),
@@ -73,13 +73,13 @@ class PageState extends StateMVC<AccountPage>{
                                 padding: EdgeInsets.all(20),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    border: Border.all(color: white, width: 2)
+                                    border: Border.all(color: accentColor, width: 2)
                                 ),
                               width: MediaQuery.of(context).size.width * 0.3,
                               child: Image.asset(
                                 'assets/img/profile.png',
                                 // width: MediaQuery.of(context).size.width * 0.2,
-                                color: white,
+                                color: accentColor,
                               )
                             ),
                             Transform.translate(
@@ -89,8 +89,8 @@ class PageState extends StateMVC<AccountPage>{
                                 width: MediaQuery.of(context).size.width * 0.06,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: Border.all(color: white, width: 2),
-                                  color: white
+                                  border: Border.all(color: accentColor, width: 2),
+                                  color: accentColor
                                 ),
                                 child: Icon(
                                   Icons.edit,
@@ -106,7 +106,7 @@ class PageState extends StateMVC<AccountPage>{
                             style: font.merge(
                               TextStyle(
                                 fontSize: MediaQuery.of(context).size.width * 0.03,
-                                color: white,
+                                color: accentColor,
                                 letterSpacing: 1.3
                               )
                             ),
@@ -124,7 +124,7 @@ class PageState extends StateMVC<AccountPage>{
                       style: font.merge(
                           TextStyle(
                               fontSize: MediaQuery.of(context).size.width * 0.05,
-                              color: white,
+                              color: accentColor,
                               letterSpacing: 1.3
                           )
                       ),
@@ -139,7 +139,7 @@ class PageState extends StateMVC<AccountPage>{
                 height: MediaQuery.of(context).size.height * 0.65 + 40,
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: white,
+                  color: accentColor,
                   borderRadius: BorderRadius.only(topLeft: radius20, topRight: radius20)
                 ),
                 child: Column(
@@ -158,7 +158,12 @@ class PageState extends StateMVC<AccountPage>{
                                 Navigator.of(context).pushNamed('/Clusters');
                               },
                             ),
-                            AccountItem(text: "Settings", imagePath: 'assets/img/settings.png',),
+                            InkWell(
+                              onTap: (){
+                                Navigator.of(context).pushNamed('/Settings');
+                              },
+                              child: AccountItem(text: "Settings", imagePath: 'assets/img/settings.png',)
+                            ),
                             // AccountItem(text: "Delete Account", myIcon: Icons.delete_forever,)
                           ],
                         )
@@ -182,7 +187,7 @@ class PageState extends StateMVC<AccountPage>{
                           style: font.merge(
                             TextStyle(
                               fontSize: MediaQuery.of(context).size.width * 0.05,
-                              color: white
+                              color: accentColor
                             )
                           ),
                         )

@@ -47,7 +47,7 @@ class PageState extends State<ClusterItem>{
               }
             });
           },
-          child: SlidableIconButton(myIcon: Icons.edit, iconSize: MediaQuery.of(context).size.width * 0.08,  bgColor: white, iconColor: black,)
+          child: SlidableIconButton(myIcon: Icons.edit, iconSize: MediaQuery.of(context).size.width * 0.08,  bgColor: accentColor, iconColor: black,)
         ),
         InkWell(
           onTap: (){
@@ -67,7 +67,7 @@ class PageState extends State<ClusterItem>{
               }
             });
           },
-          child: SlidableIconButton(myIcon: Icons.delete, iconSize: MediaQuery.of(context).size.width * 0.08,  bgColor: white, iconColor: black,)
+          child: SlidableIconButton(myIcon: Icons.delete, iconSize: MediaQuery.of(context).size.width * 0.08,  bgColor: accentColor, iconColor: black,)
         )
       ],
       actionPane: SlidableDrawerActionPane(),
@@ -90,7 +90,7 @@ class PageState extends State<ClusterItem>{
                     width: 3,
                     decoration: BoxDecoration(
                       borderRadius: borderRadius12,
-                      color: white,
+                      color: accentColor,
 
                     ),
                   ),
@@ -105,7 +105,7 @@ class PageState extends State<ClusterItem>{
                         style: font.merge(
                           TextStyle(
                             fontSize: MediaQuery.of(context).size.width * 0.05,
-                            color: white,
+                            color: accentColor,
                             letterSpacing: 1.1
                           )
                         ),
@@ -119,7 +119,7 @@ class PageState extends State<ClusterItem>{
                             style: font.merge(
                                 TextStyle(
                                     fontSize: MediaQuery.of(context).size.width * 0.03,
-                                  color: white.withOpacity(0.7),
+                                  color: accentColor.withOpacity(0.7),
                                   letterSpacing: 1.2
                                 )
                             ),

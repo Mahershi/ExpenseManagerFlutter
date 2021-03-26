@@ -94,7 +94,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                         child: Image.asset(
                           'assets/img/profile.png',
                           width: MediaQuery.of(context).size.width * 0.1,
-                          color: white,
+                          color: accentColor,
                         )
                       ),
                     ),
@@ -111,7 +111,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                               style: font.merge(
                                   TextStyle(
                                       fontSize: MediaQuery.of(context).size.width * 0.04,
-                                      color: white.withOpacity(0.6)
+                                      color: accentColor.withOpacity(0.6)
                                   )
                               ),
                             )
@@ -127,7 +127,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                 style: font.merge(
                                     TextStyle(
                                         fontSize: MediaQuery.of(context).size.width * 0.065,
-                                        color: white
+                                        color: accentColor
                                     )
                                 ),
                               )
@@ -144,7 +144,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: radius20, topLeft: radius20),
-                    color: white
+                    color: accentColor
                 ),
                 height: MediaQuery.of(context).size.height * 0.9 - 40,
                 width: MediaQuery.of(context).size.width,
@@ -174,7 +174,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                             showTitles: true,
                                             getTextStyles: (value) {
                                               return TextStyle(
-                                                  color: white,
+                                                  color: accentColor,
                                                   fontSize: 14,
                                                   letterSpacing: 1.1
                                               );
@@ -234,7 +234,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                       },
                                       touchTooltipData: BarTouchTooltipData(
                                           tooltipRoundedRadius: 12,
-                                          tooltipBgColor: white.withOpacity(0.9),
+                                          tooltipBgColor: accentColor.withOpacity(0.9),
                                           getTooltipItem: (bcgd, x, bcrd, y){
                                             return BarTooltipItem(
                                                 bcrd.y.toString(),
@@ -265,7 +265,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                           "Expenses >>",
                                         style: font.merge(
                                           TextStyle(
-                                            color: white,
+                                            color: accentColor,
                                             letterSpacing: 1.1
                                           )
                                         ),

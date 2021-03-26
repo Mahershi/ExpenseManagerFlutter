@@ -13,7 +13,7 @@ class CustomButton extends StatelessWidget{
     return OutlinedButton(
       onPressed: onpressed,
       style: OutlinedButton.styleFrom(
-          primary: white,
+          primary: accentColor,
           backgroundColor: bgColor,
           elevation: 1
       ),

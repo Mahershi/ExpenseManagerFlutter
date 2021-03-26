@@ -67,7 +67,7 @@ class PageState extends State<ExpenseBatch>{
                           fontSize: MediaQuery.of(context).size.width * 0.045,
                           letterSpacing: 1.5,
                           fontWeight: FontWeight.w800,
-                          color: white
+                          color: accentColor
                         )
                       ),
                     ),
@@ -80,7 +80,7 @@ class PageState extends State<ExpenseBatch>{
                               fontSize: MediaQuery.of(context).size.width * 0.045,
                               letterSpacing: 1.1,
                               fontWeight: FontWeight.w800,
-                              color: white
+                              color: accentColor
                           )
                       ),
                     ),
@@ -99,7 +99,7 @@ class PageState extends State<ExpenseBatch>{
                             fontSize: MediaQuery.of(context).size.width * 0.03,
                             letterSpacing: 1.2,
                             fontWeight: FontWeight.w300,
-                            color: white
+                            color: accentColor
                         )
                     ),
                   ),

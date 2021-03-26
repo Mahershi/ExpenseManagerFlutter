@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class RightTopCurve extends CustomPainter{
   Color myColor;
-  RightTopCurve({this.myColor = primaryColor});
+  RightTopCurve({this.myColor});
   @override
   void paint(Canvas canvas, Size size) {
     print(size.toString());

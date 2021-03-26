@@ -8,9 +8,11 @@ import 'package:expensemanager/network/rest_service.dart';
 import 'repositories/settings_repo.dart' as settingsRepo;
 
 
-void main(){
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   setUpConfiguration();
   RestService.init();
+  await settingsRepo.getColorIndex();
   runApp(MyApp());
 }
 

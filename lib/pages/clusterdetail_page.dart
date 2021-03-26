@@ -68,12 +68,12 @@ class PageState extends StateMVC<ClusterDetail>{
                         child: Container(
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
-                                border: Border.all(color: white),
+                                border: Border.all(color: accentColor),
                                 borderRadius: borderRadius12
                             ),
                             child: Icon(
                               Icons.chevron_left,
-                              color: white,
+                              color: accentColor,
                             )
                         ),
                       ),
@@ -89,7 +89,7 @@ class PageState extends StateMVC<ClusterDetail>{
                                 style: font.merge(
                                     TextStyle(
                                         fontSize: MediaQuery.of(context).size.width * 0.06,
-                                        color: white.withOpacity(0.6)
+                                        color: accentColor.withOpacity(0.6)
                                     )
                                 ),
                               )
@@ -105,7 +105,7 @@ class PageState extends StateMVC<ClusterDetail>{
                                   style: font.merge(
                                       TextStyle(
                                           fontSize: MediaQuery.of(context).size.width * 0.045,
-                                          color: white
+                                          color: accentColor
                                       )
                                   ),
                                 )
@@ -124,7 +124,7 @@ class PageState extends StateMVC<ClusterDetail>{
                 height: MediaQuery.of(context).size.height * 0.9 - 40,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: radius20, topLeft: radius20),
-                    color: white
+                    color: accentColor
                 ),
                 child: SingleChildScrollView(
                   child: Column(
@@ -219,7 +219,7 @@ class PageState extends StateMVC<ClusterDetail>{
                   child: Icon(
                     Icons.add,
                     size: MediaQuery.of(context).size.width * 0.08,
-                    color: white,
+                    color: accentColor,
                   ),
                 ),
               ),

@@ -28,7 +28,7 @@ class AccountItem extends StatelessWidget{
             child: Image.asset(
               imagePath,
               width: MediaQuery.of(context).size.width * 0.05,
-              color: white,
+              color: accentColor,
             )
           ),
           SizedBox(width: 20,),

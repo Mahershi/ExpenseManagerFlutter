@@ -14,7 +14,7 @@ class DataModel{
       barRods: [
         BarChartRodData(
           y: y,
-          colors: [x==currentMonth ? pinkShade : secondColor],
+          colors: [x==currentMonth ? barColor : secondColor],
           width: width,
         ),
       ]

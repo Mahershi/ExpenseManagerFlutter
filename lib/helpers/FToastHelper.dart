@@ -29,7 +29,7 @@ class CustomToast{
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
         borderRadius: borderRadius20,
-        color: white.withOpacity(0.92)
+        color: accentColor.withOpacity(0.92)
       ),
       child: Text(
         msg ?? "",

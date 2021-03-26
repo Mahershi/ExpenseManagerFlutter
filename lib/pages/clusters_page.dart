@@ -65,7 +65,7 @@ class PageState extends StateMVC<ClusterPage> with RouteAware{
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        color: white,
+        color: accentColor,
         child: Stack(
           children: [
             Container(
@@ -76,6 +76,7 @@ class PageState extends StateMVC<ClusterPage> with RouteAware{
                   heading: heading,
                   tag: "Group expenses by convenience",
                   action: _con.addNewCluster,
+                  color: primaryColor,
                 )
             ),
             Align(
@@ -100,7 +101,7 @@ class PageState extends StateMVC<ClusterPage> with RouteAware{
                       child: ClusterItem(cluster: clusterRepo.clusters[index + 1],)
                     );
                   },
-                ) : NoExpenses(text: "No Clusters", textColor: white,)
+                ) : NoExpenses(text: "No Clusters", textColor: accentColor,)
               ),
             ),
           ],

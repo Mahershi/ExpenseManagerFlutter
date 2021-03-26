@@ -58,7 +58,7 @@ class PageState extends State<ExpenseItem>{
                 }
               });
             },
-            child: SlidableButton(value: "Change Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: widget.detail ? white : primaryColor, txtColor:  widget.detail ? black: white,)
+            child: SlidableButton(value: "Change Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: widget.detail ? accentColor : primaryColor, txtColor:  widget.detail ? black: accentColor,)
         ),
       );
       list.add(
@@ -83,7 +83,7 @@ class PageState extends State<ExpenseItem>{
                 }
               });
             },
-            child: SlidableButton(value: "Remove from Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: widget.detail ? white : primaryColor, txtColor:  widget.detail ? black: white,)
+            child: SlidableButton(value: "Remove from Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: widget.detail ? accentColor : primaryColor, txtColor:  widget.detail ? black: accentColor,)
         ),
       );
     }
@@ -119,7 +119,7 @@ class PageState extends State<ExpenseItem>{
               }
             });
           },
-          child: SlidableButton(value: "Delete", fontSize: MediaQuery.of(context).size.width * 0.026,  bgColor: widget.detail ? white : primaryColor, txtColor:  widget.detail ? black: white,),
+          child: SlidableButton(value: "Delete", fontSize: MediaQuery.of(context).size.width * 0.026,  bgColor: widget.detail ? accentColor : primaryColor, txtColor:  widget.detail ? black: accentColor,),
         ),
       ],
       actionPane: SlidableDrawerActionPane(),

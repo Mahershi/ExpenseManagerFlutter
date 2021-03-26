@@ -34,7 +34,7 @@ class PageState extends StateMVC<LoginPage> {
           children: [
             Container(
                 child: CustomPaint(
-                  painter: RightTopCurve(),
+                  painter: RightTopCurve(myColor: primaryColor),
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
@@ -153,13 +153,13 @@ class PageState extends StateMVC<LoginPage> {
                                                   borderSide: BorderSide(color: primaryColor)),
                                               focusedBorder: OutlineInputBorder(
                                                   borderRadius: borderRadius12,
-                                                  borderSide: BorderSide(color: white)),
+                                                  borderSide: BorderSide(color: accentColor)),
                                               errorBorder: OutlineInputBorder(
                                                   borderRadius: borderRadius12,
                                                   borderSide: BorderSide(color: red)),
                                               focusedErrorBorder: OutlineInputBorder(
                                                   borderRadius: borderRadius12,
-                                                  borderSide: BorderSide(color: white)),
+                                                  borderSide: BorderSide(color: accentColor)),
                                             ),
                                           ),
                                         ),
@@ -187,13 +187,13 @@ class PageState extends StateMVC<LoginPage> {
                                                   borderSide: BorderSide(color: primaryColor)),
                                               focusedBorder: OutlineInputBorder(
                                                   borderRadius: borderRadius12,
-                                                  borderSide: BorderSide(color: white)),
+                                                  borderSide: BorderSide(color: accentColor)),
                                               errorBorder: OutlineInputBorder(
                                                   borderRadius: borderRadius12,
                                                   borderSide: BorderSide(color: red)),
                                               focusedErrorBorder: OutlineInputBorder(
                                                   borderRadius: borderRadius12,
-                                                  borderSide: BorderSide(color: white)),
+                                                  borderSide: BorderSide(color: accentColor)),
                                             ),
                                           ),
                                         ),
@@ -219,7 +219,7 @@ class PageState extends StateMVC<LoginPage> {
                                       child: Text(
                                         "Sign In",
                                         style: font.merge(TextStyle(
-                                            color: white,
+                                            color: accentColor,
                                             fontSize:
                                                 MediaQuery.of(context).size.width * 0.042,
                                             letterSpacing: 1.2)),

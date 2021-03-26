@@ -20,18 +20,18 @@ class RestService {
 
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
-      // print("Request Data ${options.data}");
-      // print("RequestPath ${options.path}");
-      // print("Request QP ${options.queryParameters}");
-      // print("RequestORP ${options.onReceiveProgress}");
+      print("Request Data ${options.data}");
+      print("RequestPath ${options.path}");
+      print("Request QP ${options.queryParameters}");
+      print("RequestORP ${options.onReceiveProgress}");
       return options; //continue
     }, onResponse: (Response response) async {
       // print("Response DATA${response.data}");
       return response; // continue
     }, onError: (DioError e) async {
-      // print("Calling EMSG${e.message}");
-      // print("Calling ETYPE${e.type}");
-      // print("Calling ERES${e.response}");
+      print("Calling EMSG${e.message}");
+      print("Calling ETYPE${e.type}");
+      print("Calling ERES${e.response}");
       // Do something with response error
       return e; //continue
     }));

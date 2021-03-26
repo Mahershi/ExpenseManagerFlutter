@@ -25,7 +25,7 @@ class PageState extends State<YourClusters>{
             Navigator.of(context).pop(false);
           },
           style: OutlinedButton.styleFrom(
-              primary: white,
+              primary: accentColor,
               backgroundColor: red,
               elevation: 1
           ),
@@ -33,7 +33,7 @@ class PageState extends State<YourClusters>{
             "Cancel",
             style: font.merge(
                 TextStyle(
-                    color: white,
+                    color: accentColor,
                     letterSpacing: 1.1,
                     fontSize: MediaQuery.of(context).size.width * 0.04
                 )
@@ -49,7 +49,7 @@ class PageState extends State<YourClusters>{
             Navigator.of(context).pop(widget.currentId);
           },
           style: OutlinedButton.styleFrom(
-              primary: white,
+              primary: accentColor,
               backgroundColor: primaryColor,
               elevation: 1
           ),
@@ -57,7 +57,7 @@ class PageState extends State<YourClusters>{
             "Save",
             style: font.merge(
                 TextStyle(
-                    color: white,
+                    color: accentColor,
                     letterSpacing: 1.1,
                     fontSize: MediaQuery.of(context).size.width * 0.04
                 )

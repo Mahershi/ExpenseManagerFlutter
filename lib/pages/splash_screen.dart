@@ -54,7 +54,7 @@ class PageState extends StateMVC<SplashScreen>{
           style: font.merge(
             TextStyle(
                 fontSize: splashHeading(context),
-                color: white,
+                color: accentColor,
                 fontWeight: FontWeight.w400
             )
           ),

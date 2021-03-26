@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class CurvyRightTop extends CustomPainter{
   Color myColor;
-  CurvyRightTop({this.myColor = primaryColor});
+  CurvyRightTop({this.myColor});
   @override
   void paint(Canvas canvas, Size size) {
     print(size.toString());

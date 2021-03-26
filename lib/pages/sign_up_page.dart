@@ -34,7 +34,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
         children: [
           Container(
               child: CustomPaint(
-                painter: CurvyRightTop(),
+                painter: CurvyRightTop(myColor: primaryColor),
                 child: Container(
                   height: MediaQuery.of(context).size.height,
                   width: MediaQuery.of(context).size.width,
@@ -105,7 +105,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
                                     borderSide: BorderSide(color: primaryColor)),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: borderRadius12,
-                                    borderSide: BorderSide(color: white)),
+                                    borderSide: BorderSide(color: accentColor)),
                               ),
                             ),
                           ),
@@ -148,7 +148,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
                                     borderSide: BorderSide(color: primaryColor)),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: borderRadius12,
-                                    borderSide: BorderSide(color: white)),
+                                    borderSide: BorderSide(color: accentColor)),
                               ),
                             ),
                           ),
@@ -191,7 +191,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
                                     borderSide: BorderSide(color: primaryColor)),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: borderRadius12,
-                                    borderSide: BorderSide(color: white)),
+                                    borderSide: BorderSide(color: accentColor)),
                               ),
                             ),
                           ),
@@ -236,7 +236,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
                                     borderSide: BorderSide(color: primaryColor)),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: borderRadius12,
-                                    borderSide: BorderSide(color: white)),
+                                    borderSide: BorderSide(color: accentColor)),
                               ),
                             ),
                           ),
@@ -261,7 +261,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
                         child: Text(
                           "Register",
                           style: font.merge(TextStyle(
-                              color: white,
+                              color: accentColor,
                               fontSize:
                               MediaQuery.of(context).size.width * 0.042,
                               letterSpacing: 1.2)),

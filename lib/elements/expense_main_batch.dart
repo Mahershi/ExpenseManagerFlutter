@@ -51,62 +51,7 @@ class PageState extends State<ExpenseMainBatch>{
             physics: new NeverScrollableScrollPhysics(),
             itemCount: widget.expenses.length,
             itemBuilder: (context, index){
-              return Slidable(
-                controller: slidableController,
-                secondaryActions: [
-                  InkWell(
-                    onTap: (){
-                      String new_id = widget.expenses[index].cluster_id;
-                      String expId = widget.expenses[index].id;
-                      String old = widget.expenses[index].cluster_id;
-                      print("Odl");
-                      print(old);
-                      showDialog(
-                        context: context,
-                        builder: (context){
-                          return YourClusters(currentId: widget.expenses[index].cluster_id,);
-                        }
-                      ).then((value) async{
-                        if(value != null && value != false){
-                          print("Val: " + value);
-                          new_id = value;
-                          await clusterRepo.changeCluster(expId, old ?? "0", new_id, context);
-                          slidableController.activeState.close();
-                          ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
-
-                        }
-                      });
-                    },
-                    child: SlidableButton(value: "Change Cluster", fontSize: MediaQuery.of(context).size.width * 0.026,)
-                  ),
-                  InkWell(
-                    onTap: (){
-                      showDialog(
-                        context: context,
-                        builder: (context){
-                          return ConfirmAlert(
-                            title: "Remove Expense from Cluster?",
-                            tag: "This will not delete expense but only remove it from the cluster.",
-                            color: red,
-                          );
-                        }
-                      ).then((value) async {
-                        if(value!=null){
-                          if(value){
-                            await clusterRepo.removeExpenseFromCluster(widget.expenses[index], context);
-                            slidableController.activeState.close();
-                            ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
-                          }
-                        }
-                      });
-                    },
-                    child: SlidableButton(value: "Remove from Cluster", fontSize: MediaQuery.of(context).size.width * 0.026,),
-                  ),
-                ],
-                actionPane: SlidableDrawerActionPane(),
-                actionExtentRatio: 0.2,
-                child: ExpenseItem(expense: widget.expenses[index], textColor: white, detail: true,),
-              );
+              return ExpenseItem(expense: widget.expenses[index], textColor: white, detail: true,);
             },
           ),
 

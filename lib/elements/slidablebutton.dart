@@ -4,23 +4,26 @@ import 'package:flutter/cupertino.dart';
 class SlidableButton extends StatelessWidget{
   String value;
   double fontSize;
+  Color txtColor;
+  Color bgColor;
 
-  SlidableButton({this.value, this.fontSize});
+  SlidableButton({this.value, this.fontSize, this.txtColor, this.bgColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 10,),
+        // margin: EdgeInsets.symmetric(vertical: 10,),
         decoration: BoxDecoration(
             borderRadius: borderRadius20,
-            color: white
+            color: bgColor
         ),
-        padding: EdgeInsets.all(8),
+        padding: EdgeInsets.symmetric(vertical: 20, horizontal: 5),
         child: Text(
           value,
           style: font.merge(
               TextStyle(
-                  fontSize: fontSize
+                  fontSize: fontSize,
+                color: txtColor
               )
           ),
           textAlign: TextAlign.center,

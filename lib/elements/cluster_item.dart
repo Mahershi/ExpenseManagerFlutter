@@ -47,7 +47,7 @@ class PageState extends State<ClusterItem>{
               }
             });
           },
-          child: SlidableIconButton(myIcon: Icons.edit, iconSize: MediaQuery.of(context).size.width * 0.08,)
+          child: SlidableIconButton(myIcon: Icons.edit, iconSize: MediaQuery.of(context).size.width * 0.08,  bgColor: white, iconColor: black,)
         ),
         InkWell(
           onTap: (){
@@ -67,7 +67,7 @@ class PageState extends State<ClusterItem>{
               }
             });
           },
-          child: SlidableIconButton(myIcon: Icons.delete, iconSize: MediaQuery.of(context).size.width * 0.08,)
+          child: SlidableIconButton(myIcon: Icons.delete, iconSize: MediaQuery.of(context).size.width * 0.08,  bgColor: white, iconColor: black,)
         )
       ],
       actionPane: SlidableDrawerActionPane(),

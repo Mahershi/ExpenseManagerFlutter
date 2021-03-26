@@ -5,8 +5,10 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 class SlidableIconButton extends StatelessWidget{
   IconData myIcon;
   double iconSize;
+  Color iconColor;
+  Color bgColor;
 
-  SlidableIconButton({this.myIcon, this.iconSize});
+  SlidableIconButton({this.myIcon, this.iconSize, this.iconColor, this.bgColor});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +16,7 @@ class SlidableIconButton extends StatelessWidget{
         decoration: BoxDecoration(
           // borderRadius: BorderRadius.only(topRight: radius20, bottomRight: radius20),
             borderRadius: borderRadius20,
-            color: white
+            color: bgColor
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -22,7 +24,7 @@ class SlidableIconButton extends StatelessWidget{
           children: [
             Icon(
               myIcon,
-              color: black,
+              color: iconColor,
               size: iconSize,
             ),
           ],

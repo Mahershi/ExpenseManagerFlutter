@@ -83,3 +83,22 @@ Future<bool> saveExpense(ExpenseModel expense, context) async{
   }
   return false;
 }
+
+Future<bool> deleteExpense(expenseId, context) async{
+  String api = API.expenses + '/';
+  api += '$expenseId/';
+  String method = 'DELETE';
+
+  var resp = await RestService.request(
+    context: context,
+    endpoint: api,
+    method: method,
+    authRequired: false,
+    showSuccess: true,
+    showError: true
+  );
+  if(resp['success'] == 'true'){
+    return true;
+  }
+  return false;
+}

@@ -6,6 +6,7 @@ import 'package:expensemanager/elements/add_expense_dialog.dart';
 import 'package:expensemanager/elements/back_button_app_bar.dart';
 import 'package:expensemanager/elements/expense_item.dart';
 import 'package:expensemanager/elements/expense_list_main.dart';
+import 'package:expensemanager/elements/no_expenses.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/expense_model.dart';
 import 'package:expensemanager/models/route_arguement.dart';
@@ -166,8 +167,7 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                                             }else{
                                               _con.getExpensesMonth(context, currentMonth+1, currentYear);
                                             }
-
-                                            setState(() {});
+                                            setState(() {_con.isLoading = true;});
                                           }
                                       ),
                                       items: _con.yearLocal.map((e){
@@ -217,7 +217,7 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                                               _con.getExpensesMonth(context, currentMonth+1, currentYear);
                                             }
 
-                                            setState(() {});
+                                            setState(() {_con.isLoading = true;});
                                           }
                                       ),
                                       items: (yearIndex == _con.yearLocal.length-1 ? _con.monthsLocal : months).map((e){
@@ -253,7 +253,22 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                         ],
                       ),
                     ),
-                    Expanded(child: ExpenseList(con: _con,))
+                    Expanded(
+                        child:  _con.isLoading ? Container(
+                          alignment: Alignment.center,
+                          child: SizedBox(
+                            height: 50,
+                              width: 50,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(white),
+                                strokeWidth: 2,
+                              )
+                          ),
+                        ) : _con.expenseList.isNotEmpty ? ExpenseList(con: _con,) : Container(
+                          child: NoExpenses(textColor: white,),
+                          alignment: Alignment.center,
+                        ),
+                    )
                   ],
                 ),
               ),

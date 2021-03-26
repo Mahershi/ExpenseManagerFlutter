@@ -8,6 +8,7 @@ import 'package:expensemanager/network/APIs.dart';
 import 'package:flutter/material.dart';
 
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+enum SortType {DATE, CATEGORY}
 List<CategoryModel> categories = List<CategoryModel>();
 
 Future<bool> testConnection(context) async{

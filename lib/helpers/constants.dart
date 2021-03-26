@@ -34,6 +34,8 @@ Color pinkShade = Color(0xFFEF8767);
 List<String> weekDay = ['', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 List<String> months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+
+List<Color> colorsForPie = [Colors.red, Colors.blue, Colors.teal, Colors.purple, Colors.orangeAccent, Colors.pinkAccent, Colors.deepPurple, Colors.lightGreen, Colors.brown];
 //FONT SIZE
 
 double splashHeading(context){

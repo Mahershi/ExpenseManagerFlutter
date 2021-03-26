@@ -3,10 +3,12 @@ import 'package:expensemanager/elements/expense_item.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/expense_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:expensemanager/repositories/settings_repo.dart' as settingsRepo;
 
 class ExpenseBatch extends StatefulWidget{
   List<ExpenseModel> expenses;
-  ExpenseBatch({this.expenses});
+  var type;
+  ExpenseBatch({this.expenses, this.type});
   @override
   PageState createState() => PageState();
 }
@@ -21,7 +23,11 @@ class PageState extends State<ExpenseBatch>{
     super.initState();
     today = DateTime.now();
     todayString = today.toString().substring(0, 10);
-    title = widget.expenses[0].expense_date.substring(0, 10) == todayString ? "Today" : widget.expenses[0].expense_date.substring(0, 10);
+    // if()
+    //   title = ;
+    // else
+    //   title =
+    // print("TITLE: " + title);
     calculateTotal();
   }
 
@@ -30,7 +36,6 @@ class PageState extends State<ExpenseBatch>{
     super.didUpdateWidget(oldWidget);
     calculateTotal();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +59,9 @@ class PageState extends State<ExpenseBatch>{
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                       title,
+                      widget.type == settingsRepo.SortType.DATE
+                      ? widget.expenses[0].expense_date.substring(0, 10) == todayString ? "Today" : widget.expenses[0].expense_date.substring(0, 10)
+                      : settingsRepo.getCategoryById(widget.expenses[0].category_id).name,
                       style: font.merge(
                         TextStyle(
                           fontSize: MediaQuery.of(context).size.width * 0.045,
@@ -83,15 +90,18 @@ class PageState extends State<ExpenseBatch>{
                   height: 5,
                 ),
 
-                Text(
-                  weekDay[DateTime.parse(widget.expenses[0].expense_date).weekday],
-                  style: font.merge(
-                      TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.03,
-                          letterSpacing: 1.2,
-                          fontWeight: FontWeight.w300,
-                          color: white
-                      )
+                Visibility(
+                  visible: widget.type == settingsRepo.SortType.DATE,
+                  child: Text(
+                    weekDay[DateTime.parse(widget.expenses[0].expense_date).weekday],
+                    style: font.merge(
+                        TextStyle(
+                            fontSize: MediaQuery.of(context).size.width * 0.03,
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.w300,
+                            color: white
+                        )
+                    ),
                   ),
                 ),
               ],
@@ -123,7 +133,6 @@ class PageState extends State<ExpenseBatch>{
       // print("Total: " + total.toString());
     }
     setState(() {
-      // print(" Set Total: " + total.toString());
     });
   }
 }

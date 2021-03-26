@@ -7,6 +7,7 @@ import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
 
 class ExpenseDetailController extends ControllerMVC{
+  bool isLoading = true;
   bool call = true;
   List<String> monthsLocal = ['None', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   List<String> yearLocal = [];
@@ -53,7 +54,7 @@ class ExpenseDetailController extends ControllerMVC{
       }
       expenseList[tempDate].add(exp);
     }
-    setState(() {});
+    setState(() {isLoading = false;});
   }
 
 }

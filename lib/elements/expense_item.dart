@@ -60,6 +60,8 @@ class PageState extends State<ExpenseItem>{
                           }else{
                             print("trigger main");
                             ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
+                            ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterDetail);
+
                           }
                         }
 

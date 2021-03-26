@@ -18,9 +18,9 @@ class ExpenseBloc{
   static final homeStateSink = expStateController.sink;
   static final homeStateStream = expStateController.stream;
 
-  static final clStateController = StreamController<int>.broadcast();
-  static final clStateSink = expStateController.sink;
-  static final clStateStream = expStateController.stream;
+  static final exListStateController = StreamController<int>.broadcast();
+  static final exListStateSink = exListStateController.sink;
+  static final exListStateStream = exListStateController.stream;
 
   static void mapexpEventToState(ExpenseEvent event){
     // if(event == ExpenseEvent.RefreshExpenseDetail){

@@ -101,7 +101,11 @@ class PageState extends StateMVC<ClusterPage> with RouteAware{
                       child: ClusterItem(cluster: clusterRepo.clusters[index + 1],)
                     );
                   },
-                ) : NoExpenses(text: "No Clusters", textColor: accentColor,)
+                ) : NoExpenses(
+                  text: "No Clusters!",
+                  textColor: accentColor,
+                  tag: "Group your expenses under a common title as per your convenience to receive statistics about the cluster",
+                )
               ),
             ),
           ],

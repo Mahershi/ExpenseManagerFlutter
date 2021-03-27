@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/expense_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +20,7 @@ class AddExpenseDialog extends StatefulWidget{
 }
 
 class PageState extends State<AddExpenseDialog>{
+  CarouselController carouselController = CarouselController();
   TextEditingController name = TextEditingController();
   TextEditingController amount = TextEditingController();
   String currentCategory = '1';
@@ -90,10 +93,13 @@ class PageState extends State<AddExpenseDialog>{
                 print("CID");
                 print(widget.expense.cluster_id);
                 widget.expense.expense_date = selectedDateString;
-                await exRepo.saveExpense(widget.expense, context).then((value){
-                  print("Value:  " + value.toString());
-                  Navigator.of(context).pop(value);
-                });
+                Navigator.of(context).pop(widget.expense);
+                //
+                // await exRepo.saveExpense(widget.expense, context).then((value){
+                //
+                //   print("Value:  " + value.toString());
+                //   Navigator.of(context).pop(value);
+                // });
               }
             },
             style: OutlinedButton.styleFrom(
@@ -281,130 +287,81 @@ class PageState extends State<AddExpenseDialog>{
 
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
                     children: [
-                      Expanded(
-                        child: Container(
+                      Container(
+                          margin: EdgeInsets.only(top: 30, bottom: 20),
                           child: Text(
                             "Category",
                             style: font.merge(
-                              TextStyle(
-                                fontWeight: FontWeight.w300,
-                                color: grey,
-                                fontSize: MediaQuery.of(context).size.width * 0.04
-                              )
+                                TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    color: grey,
+                                    fontSize: MediaQuery.of(context).size.width * 0.04
+                                )
                             ),
                           )
-                        ),
                       ),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10, top: 10, bottom: 10),
-                          child: DropdownButton(
-                            isExpanded: true,
-                            value: currentCategory,
-                            items: settingsRepo.categories.map((e){
-                              print(e.name);
-                              return DropdownMenuItem(
-                                value: e.id,
-                                child: Text(
-                                  e.name,
-                                  style: font.merge(
-                                    TextStyle(
-                                      fontSize: MediaQuery.of(context).size.width * 0.035,
-                                      color: primaryColor,
-                                      fontWeight: FontWeight.w600
+                      Container(
+                          child: IntrinsicHeight(
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width * 0.15,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(color: grey),
+                                      bottom: BorderSide(color: grey),
                                     )
                                   ),
                                 ),
-                              );
-                            }).toList(),
-                            onChanged: (value){
-                              currentCategory = value;
-                              setState(() {
-
-                              });
-                            },
-                            underline: Container(
-                              height: 1,
-                              color: primaryColor,
+                                CarouselSlider(
+                                  carouselController: carouselController,
+                                  options: CarouselOptions(
+                                    height: 40,
+                                    initialPage: settingsRepo.categories.indexOf(settingsRepo.getCategoryById(currentCategory)),
+                                    viewportFraction: 0.4,
+                                    onPageChanged: (index, reason){
+                                      currentCategory = settingsRepo.categories.elementAt(index).id;
+                                      setState(() {
+                                      });
+                                    },
+                                    disableCenter: false,
+                                  ),
+                                  items: settingsRepo.categories.map((e){
+                                    return InkWell(
+                                      splashColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      onTap: (){
+                                        currentCategory = e.id;
+                                        carouselController.animateToPage(settingsRepo.categories.indexOf(settingsRepo.getCategoryById(currentCategory)));
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 10),
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            e.name,
+                                            style: font.merge(
+                                                TextStyle(
+                                                    color: e.id == currentCategory ? black : grey,
+                                                    letterSpacing: 1.3,
+                                                  fontWeight: e.id == currentCategory ? FontWeight.w600 : FontWeight.w300,
+                                                  fontSize: MediaQuery.of(context).size.width * 0.03
+                                                )
+                                            ),
+                                          )
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
                             ),
-                            icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor,),
                           )
-                        ),
                       ),
-
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Expanded(
-                  //       child: Container(
-                  //           child: Text(
-                  //             "Cluster",
-                  //             style: font.merge(
-                  //                 TextStyle(
-                  //                     fontWeight: FontWeight.w300,
-                  //                     color: grey,
-                  //                     fontSize: MediaQuery.of(context).size.width * 0.04
-                  //                 )
-                  //             ),
-                  //           )
-                  //       ),
-                  //     ),
-                  //     Expanded(
-                  //       child: Container(
-                  //           margin: EdgeInsets.only(left: 10, top: 10, bottom: 10),
-                  //           child: DropdownButton(
-                  //             isExpanded: true,
-                  //             value: currentCluster,
-                  //             items: clusterRepo.clusters.map((e){
-                  //               print(e.name);
-                  //               return DropdownMenuItem(
-                  //                 value: e.id,
-                  //                 child: Text(
-                  //                   e.name,
-                  //                   style: font.merge(
-                  //                       TextStyle(
-                  //                           fontSize: MediaQuery.of(context).size.width * 0.035,
-                  //                           color: primaryColor,
-                  //                           fontWeight: FontWeight.w600
-                  //                       )
-                  //                   ),
-                  //                 ),
-                  //               );
-                  //             }).toList(),
-                  //             onChanged: (value){
-                  //               currentCluster = value;
-                  //               setState(() {
-                  //
-                  //               });
-                  //             },
-                  //             underline: Container(
-                  //               height: 1,
-                  //               color: primaryColor,
-                  //             ),
-                  //             icon: Icon(Icons.keyboard_arrow_down_rounded, color: primaryColor,),
-                  //
-                  //           )
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // Container(
-                  //   child: Text(
-                  //     "To add to a new cluster, first create a new cluster",
-                  //     style: font.merge(
-                  //       TextStyle(
-                  //         fontSize: MediaQuery.of(context).size.width * 0.025,
-                  //         color: grey
-                  //       )
-                  //     ),
-                  //     textAlign: TextAlign.justify,
-                  //   )
-                  // )
+
                 ],
               ),
             ),

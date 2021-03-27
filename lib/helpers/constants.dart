@@ -8,6 +8,8 @@ int expense = 2;
 int spend = 0;
 int profile = 3;
 
+double amountspacing = 1.1;
+
 // DESIGN
 Border testBorder = Border.all(color: Colors.red);
 

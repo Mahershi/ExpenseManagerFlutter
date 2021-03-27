@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget{
   PageState createState() => PageState();
 }
 
-class PageState extends StateMVC<SplashScreen>{
+class PageState extends StateMVC<SplashScreen> with WidgetsBindingObserver{
   SplashScreenController _con;
 
   PageState() : super(SplashScreenController()){
@@ -25,6 +25,9 @@ class PageState extends StateMVC<SplashScreen>{
   void initState(){
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top]);
     super.initState();
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //
+    // })
     initializeApp();
   }
   

@@ -16,25 +16,28 @@ int latest_year = 0;
 int oldest_month = 0;
 int oldest_year = 0;
 
-Future<dynamic> getExpensesDynamicQP(context, {qp = const {}, returnOrNot = false}) async{
+Future<dynamic> getExpensesDynamicQP(context, {qp = const {}, returnOrNot = false, showLoader = false}) async{
   var resp = await RestService.request(
     context: context,
     endpoint: API.expenses,
     authRequired: false,
-    queryParameters: qp
+    queryParameters: qp,
+    showLoader: showLoader
   );
   // print("SSS");
   // log(resp['data'].toString());
-  if(resp['success'] == 'true'){
-    expenses.clear();
-    for (var i in resp['data']){
-      var expense = ExpenseModel.fromJson(i);
-      // print(expense.toMap().toString());
-      expenses.add(expense);
-    }
-  }
+
   if(returnOrNot){
     return resp['data'];
+  }else{
+    if(resp['success'] == 'true'){
+      expenses.clear();
+      for (var i in resp['data']){
+        var expense = ExpenseModel.fromJson(i);
+        print(expense.toMap().toString());
+        expenses.add(expense);
+      }
+    }
   }
 }
 
@@ -77,6 +80,7 @@ Future<bool> saveExpense(ExpenseModel expense, context) async{
     data: data,
     method: method,
     authRequired: false,
+    showLoader: true
   );
   if(resp['success'] == 'true'){
     return true;

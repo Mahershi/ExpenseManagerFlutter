@@ -15,6 +15,7 @@ import 'package:expensemanager/repositories/user_repo.dart';
 import 'package:expensemanager/repositories/settings_repo.dart' as settingsRepo;
 
 class ClusterController extends ControllerMVC{
+  bool loaded = false;
   ClusterModel newCluster;
   ClusterModel currentCluster;
   List<ExpenseModel> expenses = [];
@@ -29,18 +30,21 @@ class ClusterController extends ControllerMVC{
   Map<String, double> percentage = Map<String, double>();
 
   Future<void> getExpensesForClusterId(context, clusterId) async{
-
+    loaded = false;
     var qp = {
       'cluster': clusterId,
       'user_id': currentUser.id
     };
-    var data = await exRepo.getExpensesDynamicQP(context, qp: qp, returnOrNot: true);
+    var data = await exRepo.getExpensesDynamicQP(context, qp: qp, returnOrNot: true,);
     expenses.clear();
+    print("got expenses");
     for (var ex in data){
       ExpenseModel e = ExpenseModel.fromJson(ex);
       expenses.add(e);
+      // print(e.toMap().toString());
     }
-    calculateTotal();
+
+    await calculateTotal();
     await prepareListPie();
     await prepareList();
   }
@@ -80,22 +84,27 @@ class ClusterController extends ControllerMVC{
         expenseList[temp.toString().substring(0, 10)] = [];
       expenseList[temp.toString().substring(0, 10)].add(i);
     }
-    setState(() { });
+    setState(() {
+      loaded = true;
+    });
   }
 
   Future<void> prepareListPie() async{
     pieData.clear();
     for(var i in expenses){
-      String cat = settingsRepo.getCategoryById(i.category_id).name;
+      String cat = await settingsRepo.getCategoryById(i.category_id).name;
       if(!pieData.containsKey(cat)){
         pieData[cat] = [];
       }
       print("added in " + cat);
       pieData[cat].add(i);
     }
+    print("created PIE data : " + pieData.length.toString());
     // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
     // print("PDC l" + pieDataCopy.length.toString());
-    calculatePercentage();
+
+    if(pieData.isNotEmpty)
+      calculatePercentage();
   }
 
   Future<void> calculatePercentage() async{
@@ -114,7 +123,8 @@ class ClusterController extends ControllerMVC{
       print("CAt: " + k + ", " + percentage[k].toString());
     }
 
-    pieData = sortMap();
+    if(pieData.length > 1)
+      pieData = sortMap();
     // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
   }
 
@@ -131,14 +141,17 @@ class ClusterController extends ControllerMVC{
   }
 
   void reorder(id){
+    print("called reorder");
     if(id == -1){
-      pieData = sortMap();
+      if(pieData.length > 1)
+        pieData = sortMap();
       // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
     }
     else{
       // pieDataCopy.clear();
       // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
-      pieData = sortMap();
+      if(pieData.length > 1)
+        pieData = sortMap();
       Map<String, List<ExpenseModel>> temp = {};
       for(var i=0; i<percentage.keys.length; i++){
         if(i==id){

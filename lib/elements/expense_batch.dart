@@ -8,7 +8,8 @@ import 'package:expensemanager/repositories/settings_repo.dart' as settingsRepo;
 class ExpenseBatch extends StatefulWidget{
   List<ExpenseModel> expenses;
   var type;
-  ExpenseBatch({this.expenses, this.type});
+  bool detail;
+  ExpenseBatch({this.expenses, this.type, this.detail});
   @override
   PageState createState() => PageState();
 }
@@ -18,6 +19,7 @@ class PageState extends State<ExpenseBatch>{
   String todayString;
   String title;
   int total = 0;
+
   @override
   void initState(){
     super.initState();
@@ -78,7 +80,7 @@ class PageState extends State<ExpenseBatch>{
                       style: font.merge(
                           TextStyle(
                               fontSize: MediaQuery.of(context).size.width * 0.045,
-                              letterSpacing: 1.1,
+                              letterSpacing: amountspacing,
                               fontWeight: FontWeight.w800,
                               color: accentColor
                           )

@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:expensemanager/elements/loader.dart';
 import 'package:expensemanager/helpers/FToastHelper.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import '../app_config.dart';
 import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
 
@@ -26,7 +28,7 @@ class RestService {
       print("RequestORP ${options.onReceiveProgress}");
       return options; //continue
     }, onResponse: (Response response) async {
-      // print("Response DATA${response.data}");
+      print("Response DATA${response.data}");
       return response; // continue
     }, onError: (DioError e) async {
       print("Calling EMSG${e.message}");
@@ -46,8 +48,9 @@ class RestService {
         Map<String, dynamic> queryParameters = const {},
         dynamic data = const {},
         bool showError = false,
-        bool showLoader = true,
-        bool showSuccess = false}) async {
+        bool showLoader = false,
+        bool showSuccess = false,
+        Color loaderColor}) async {
     try {
       if (AppConfig.config.environment == 'development') {
         // print('Calling: ${method.padLeft(4, ' ')} $endpoint');
@@ -61,6 +64,17 @@ class RestService {
         'authrequired': authRequired
       };
 
+
+      if(showLoader && context !=null ){
+        var t = showDialog(
+          barrierColor: Colors.transparent,
+          barrierDismissible: false,
+          context: context,
+          builder: (context){
+            return Loading(color: loaderColor,);
+          }
+        );
+      }
       // print(_cacheOptions.headers.toString());
       Response<dynamic> response = await dio.request(
         '$endpoint',
@@ -68,7 +82,9 @@ class RestService {
         queryParameters: queryParameters,
         options: _cacheOptions,
       );
-
+      if(showLoader && context != null){
+        Navigator.of(context).pop();
+      }
       var apiResponJson = response.data;
       var json = jsonDecode(response.toString());
       // print(response.statusCode);

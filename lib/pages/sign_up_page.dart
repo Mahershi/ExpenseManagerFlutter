@@ -59,7 +59,7 @@ class PageState extends StateMVC<SignupPage> with SingleTickerProviderStateMixin
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BackbuttonAppBar(heading: heading,),
+                    BackbuttonAppBar(heading: heading, color: primaryColor,),
 
                     Form(
                       key: registerFormKey,

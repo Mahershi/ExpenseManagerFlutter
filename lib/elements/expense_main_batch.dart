@@ -51,7 +51,7 @@ class PageState extends State<ExpenseMainBatch>{
             physics: new NeverScrollableScrollPhysics(),
             itemCount: widget.expenses.length,
             itemBuilder: (context, index){
-              return ExpenseItem(expense: widget.expenses[index], textColor: accentColor, detail: true,);
+              return ExpenseItem(expense: widget.expenses[index], textColor: accentColor,);
             },
           ),
 

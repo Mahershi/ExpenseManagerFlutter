@@ -1,3 +1,4 @@
+import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/cluster_model.dart';
 import 'package:expensemanager/models/expense_model.dart';
 import 'package:expensemanager/network/APIs.dart';
@@ -25,7 +26,9 @@ Future<bool> addorModifyCluster(context, ClusterModel cluster) async{
     data: data,
     authRequired: false,
     showSuccess: true,
-    showError: true
+    showError: true,
+    showLoader: true,
+    loaderColor: accentColor
   );
   return resp['success'] == 'true';
 }
@@ -39,7 +42,7 @@ Future<void> getClusters(context) async{
       context: context,
       endpoint: API.clusters,
       authRequired: false,
-      queryParameters: qp
+      queryParameters: qp,
   );
   if(resp['success'] == 'true'){
     clusters.clear();
@@ -65,7 +68,9 @@ Future<void> changeCluster(expenseid, oldclusterid, newclusterid, context) async
     authRequired: false,
     method: "POST",
     showSuccess: true,
-    showError: true
+    showError: true,
+    showLoader: true,
+    loaderColor: accentColor
   );
 }
 
@@ -80,7 +85,8 @@ Future<void> removeExpenseFromCluster(ExpenseModel expense, context) async{
       endpoint: API.cluster_remove,
       data: data,
       authRequired: false,
-      method: "POST"
+      method: "POST",
+    showLoader: true
   );
 }
 
@@ -95,7 +101,9 @@ Future<bool> deleteCluster(clusterID, context) async{
     method: method,
     authRequired: false,
     showSuccess: true,
-    showError: true
+    showError: true,
+    showLoader: true,
+    loaderColor: accentColor
   );
 
   print(resp.toString());

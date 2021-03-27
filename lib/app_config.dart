@@ -59,7 +59,7 @@ class _Config {
 
   static Config staging = Config(
     environment: 'staging',
-    // baseUrl: '$stagingBaseURL$version',
+    baseUrl: 'https://bhavsarexpensemanager.herokuapp.com/$api',
     // imagePath: '$stagingBaseURL$imagePATH',
     clientId: '',
     clientSecret: '',

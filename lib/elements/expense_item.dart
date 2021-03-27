@@ -18,9 +18,12 @@ class ExpenseItem extends StatefulWidget{
   // int value;
   ExpenseModel expense;
   Color textColor;
-  bool detail;
+  // bool detail;
+  // bool action;
+  // bool large;
+  // bool invertColor;
 
-  ExpenseItem({this.expense, this.textColor, this.detail=false});
+  ExpenseItem({this.expense, this.textColor,});
   @override
   PageState createState() => PageState();
 }
@@ -30,37 +33,43 @@ class PageState extends State<ExpenseItem>{
   @override
   void initState(){
     super.initState();
+    // widget.detail = settingsRepo.detail;
+    // widget.action = settingsRepo.action;
+    // widget.large = settingsRepo.large;
+    // widget.invertColor = settingsRepo.invertColor;
   }
 
   List<Widget> getActions(){
     List<Widget> list = [];
-    if(widget.detail){
-      list.add(
-        InkWell(
-            onTap: (){
-              String new_id = widget.expense.cluster_id;
-              String expId = widget.expense.id;
-              String old = widget.expense.cluster_id;
-              print("Odl");
-              print(old);
-              showDialog(
-                  context: context,
-                  builder: (context){
-                    return YourClusters(currentId: widget.expense.cluster_id,);
-                  }
-              ).then((value) async{
-                if(value != null && value != false){
-                  print("Val: " + value);
-                  new_id = value;
-                  await clusterRepo.changeCluster(expId, old ?? "0", new_id, context);
-                  slidableController.activeState.close();
-                  ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
+
+    list.add(
+      InkWell(
+          onTap: (){
+            String new_id = widget.expense.cluster_id;
+            String expId = widget.expense.id;
+            String old = widget.expense.cluster_id;
+            showDialog(
+                context: context,
+                builder: (context){
+                  return YourClusters(currentId: widget.expense.cluster_id,);
                 }
-              });
-            },
-            child: SlidableButton(value: "Change Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: widget.detail ? accentColor : primaryColor, txtColor:  widget.detail ? black: accentColor,)
-        ),
-      );
+            ).then((value) async{
+              if(value != null && value != false){
+                print("Val: " + value);
+                new_id = value;
+                await clusterRepo.changeCluster(expId, old ?? "0", new_id, context);
+                slidableController.activeState.close();
+                ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
+                ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
+                ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterDetail);
+              }
+            });
+          },
+          child: SlidableButton(value:  widget.expense.cluster_id != null ? "Change Cluster" : "Assign Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: settingsRepo.invertColor ? accentColor : primaryColor, txtColor:  settingsRepo.invertColor ? black: accentColor,)
+      ),
+    );
+
+    if(widget.expense.cluster_id != null){
       list.add(
         InkWell(
             onTap: (){
@@ -79,11 +88,13 @@ class PageState extends State<ExpenseItem>{
                     await clusterRepo.removeExpenseFromCluster(widget.expense, context);
                     slidableController.activeState.close();
                     ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
+                    ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
+                    ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterDetail);
                   }
                 }
               });
             },
-            child: SlidableButton(value: "Remove from Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: widget.detail ? accentColor : primaryColor, txtColor:  widget.detail ? black: accentColor,)
+            child: SlidableButton(value: "Remove from Cluster", fontSize: MediaQuery.of(context).size.width * 0.026, bgColor: settingsRepo.invertColor ? accentColor : primaryColor, txtColor:  settingsRepo.invertColor ? black: accentColor,)
         ),
       );
     }
@@ -94,7 +105,7 @@ class PageState extends State<ExpenseItem>{
   Widget build(BuildContext context) {
     return Slidable(
       controller: slidableController,
-      actions: widget.detail ? getActions() : null,
+      actions: settingsRepo.action ? getActions() : null,
       secondaryActions: [
         InkWell(
           onTap: (){
@@ -119,13 +130,13 @@ class PageState extends State<ExpenseItem>{
               }
             });
           },
-          child: SlidableButton(value: "Delete", fontSize: MediaQuery.of(context).size.width * 0.026,  bgColor: widget.detail ? accentColor : primaryColor, txtColor:  widget.detail ? black: accentColor,),
+          child: SlidableButton(value: "Delete", fontSize: MediaQuery.of(context).size.width * 0.026,  bgColor: settingsRepo.invertColor ? accentColor : primaryColor, txtColor:  settingsRepo.invertColor ? black: accentColor,),
         ),
       ],
       actionPane: SlidableDrawerActionPane(),
-      actionExtentRatio: 0.2,
+      actionExtentRatio: 0.22,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: widget.detail ? 20 : 10, horizontal: 20),
+        padding: EdgeInsets.symmetric(vertical: settingsRepo.large ? 20 : 10, horizontal: 20),
         // margin: EdgeInsets.all(0),
         //   decoration: BoxDecoration(border: testBorder),
         child: Row(
@@ -144,20 +155,29 @@ class PageState extends State<ExpenseItem>{
                           builder: (context){
                             return AddExpenseDialog(expense: widget.expense, title: "Edit Expense",);
                           }
-                        ).then((value){
+                        ).then((value) async {
                           if(value == null)
                             value = false;
                           print("Value here");
-                          if(value){
-                            if(widget.detail){
-                              print("trigger detail");
-                              ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
-                            }else{
-                              print("trigger main");
-                              ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
-                              ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterDetail);
+                          if(value != false){
+                            await exRepo.saveExpense(value, context).then((value){
+                              print("Value:  " + value.toString());
+                              if(value){
+                                  if (settingsRepo.detail) {
+                                    print("trigger detail");
+                                    ExpenseBloc.expEventSink
+                                        .add(ExpenseEvent.RefreshHome);
+                                    ExpenseBloc.expEventSink
+                                        .add(ExpenseEvent.RefreshExpenseDetail);
+                                  } else {
+                                    print("trigger cluster");
+                                    ExpenseBloc.expEventSink
+                                        .add(ExpenseEvent.RefreshClusterDetail);
+                                  }
+                                }
 
-                            }
+                            });
+
                           }
 
                         });
@@ -187,7 +207,7 @@ class PageState extends State<ExpenseItem>{
                           children: [
                             Container(
                               child: Text(
-                                widget.expense.name,
+                                widget.expense.name ?? "",
                                 style: font.merge(
                                   TextStyle(
                                     color: widget.textColor,
@@ -197,11 +217,11 @@ class PageState extends State<ExpenseItem>{
                               ),
                             ),
                             Visibility(
-                              visible: widget.detail,
+                              visible: settingsRepo.detail,
                               child: SizedBox(height: 5,)
                             ),
                             Visibility(
-                              visible: widget.detail,
+                              visible: settingsRepo.detail,
                               child: Container(
                                 child: Text(
                                   settingsRepo.getCategoryById(widget.expense.category_id).name,
@@ -223,28 +243,30 @@ class PageState extends State<ExpenseItem>{
               ),
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Container(
                     child: Text(
-                      "₹ " + widget.expense.amount,
+                      "₹ " + widget.expense.amount ?? "",
                       style: font.merge(
                           TextStyle(
                               color: widget.textColor,
-                              fontSize: MediaQuery.of(context).size.width * 0.04
+                              fontSize: MediaQuery.of(context).size.width * 0.04,
+                              letterSpacing: amountspacing
                           )
                       ),
                     )
                 ),
                 Visibility(
-                    visible: widget.detail,
+                    visible: settingsRepo.detail,
                     child: SizedBox(height: 5,)
                 ),
                 Visibility(
-                  visible: widget.detail,
+                  visible: settingsRepo.detail,
                   child: Container(
                       alignment: Alignment.centerRight,
                       child: Text(
-                        widget.detail ? widget.expense.cluster_id != null ? clusterRepo.getClusterById(widget.expense.cluster_id).name : "" : "",
+                        settingsRepo.detail ? widget.expense.cluster_id != null ? clusterRepo.getClusterById(widget.expense.cluster_id) != null ? clusterRepo.getClusterById(widget.expense.cluster_id).name : "" : "" : "",
                         style: font.merge(
                             TextStyle(
                                 color: widget.textColor.withOpacity(0.8),

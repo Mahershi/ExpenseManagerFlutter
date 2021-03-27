@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:expensemanager/repositories/settings_repo.dart' as settingsRepo;
 import 'package:expensemanager/blocs/expense_detail_bloc.dart';
+import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 class ExpensesDetail extends StatefulWidget{
   RouteArgument routeArgument;
 
@@ -43,7 +44,10 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
   @override
   void initState(){
     super.initState();
-
+    settingsRepo.action = true;
+    settingsRepo.invertColor = true;
+    settingsRepo.large = true;
+    settingsRepo.detail = true;
     ExpenseBloc.expEventStream.listen((event)async{
       if(event == ExpenseEvent.RefreshExpenseDetail)
         await _con.getExpensesMonth(context, currentMonth+1, currentYear);
@@ -112,34 +116,7 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                       margin: EdgeInsets.only(left: 40, right: 20, top: 40, bottom: 10),
                       child: Stack(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  child: Text(
-                                      "Total",
-                                      style: font.merge(
-                                          TextStyle(
-                                            color: accentColor,
-                                            fontSize: MediaQuery.of(context).size.width * 0.055,
-                                          )
-                                      )
-                                  )
-                              ),
-                              SizedBox(height: 5,),
-                              Container(
-                                  child: Text(
-                                      "₹ " + _con.total.toString(),
-                                      style: font.merge(
-                                          TextStyle(
-                                            color: accentColor,
-                                            fontSize: MediaQuery.of(context).size.width * 0.09,
-                                          )
-                                      )
-                                  )
-                              ),
-                            ],
-                          ),
+
                           Align(
                             alignment: Alignment.centerRight,
                             child: Container(
@@ -161,7 +138,7 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
 
                                             if(reason == CarouselPageChangedReason.manual){
                                               _con.timer.cancel();
-                                              _con.timer = Timer.periodic(Duration(milliseconds: 1500), (timer) {
+                                              _con.timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
                                                 _con.getExpensesMonth(context, currentMonth+1, currentYear);
                                                 _con.timer.cancel();
                                               });
@@ -210,7 +187,7 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                                             print("CM:" + currentMonth.toString());
                                             if(reason == CarouselPageChangedReason.manual){
                                               _con.timer.cancel();
-                                              _con.timer = Timer.periodic(Duration(milliseconds: 1500), (timer) {
+                                              _con.timer = Timer.periodic(Duration(milliseconds: 1000), (timer) {
                                                 _con.getExpensesMonth(context, currentMonth+1, currentYear);
                                                 _con.timer.cancel();
                                               });
@@ -250,7 +227,39 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                                   ],
                                 )
                             ),
-                          )
+                          ),
+                          Container(
+                            color: primaryColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    child: Text(
+                                        "Total",
+                                        style: font.merge(
+                                            TextStyle(
+                                              color: accentColor,
+                                              fontSize: MediaQuery.of(context).size.width * 0.055,
+                                            )
+                                        )
+                                    )
+                                ),
+                                SizedBox(height: 5,),
+                                Container(
+                                    child: Text(
+                                        "₹ " + _con.total.toString(),
+                                        style: font.merge(
+                                            TextStyle(
+                                                color: accentColor,
+                                                fontSize: MediaQuery.of(context).size.width * 0.09,
+                                                letterSpacing: amountspacing
+                                            )
+                                        )
+                                    )
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -292,12 +301,19 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
                       // e.user_id = currentUser.id;
                       return AddExpenseDialog(expense: e, title: "Add Expense",);
                     },
-                  ).then((value){
-                    print("visible");
-                    if(value == null)
-                      value = false;
-                    if (value)
-                      _con.getExpensesMonth(context, currentMonth+1, currentYear);
+                  ).then((value) async{
+                    if(value != null){
+                      if(value != false){
+                        await exRepo.saveExpense(value, context).then((value){
+                          print("Value:  " + value.toString());
+                          if(value){
+                            ExpenseBloc.expEventSink
+                                .add(ExpenseEvent.RefreshExpenseDetail);
+                          }
+
+                        });
+                      }
+                    }
                   });
                 },
                 child: Container(

@@ -32,6 +32,10 @@ class PageState extends StateMVC<HomePage> with RouteAware{
     super.didPopNext();
     // _con.getExpenses6Months(context);
     print("Notifying pop");
+    settingsRepo.action = false;
+    settingsRepo.invertColor = false;
+    settingsRepo.large = false;
+    settingsRepo.detail = true;
     ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
   }
 
@@ -50,6 +54,11 @@ class PageState extends StateMVC<HomePage> with RouteAware{
   @override
   void initState(){
     super.initState();
+    _con.getClusters();
+    settingsRepo.action = false;
+    settingsRepo.invertColor = false;
+    settingsRepo.large = false;
+    settingsRepo.detail = true;
     ExpenseBloc.expEventStream.listen((event)async{
       if(event == ExpenseEvent.RefreshHome) {
         await _con.getClusters();
@@ -59,7 +68,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
     });
     _con.getExpenses6Months(context);
     _con.getExpensesTimeSpane(context);
-    _con.getClusters();
+
     // _con.getExpensesMonth(context, 2, 2021);
     SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
 
@@ -117,7 +126,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                             )
                         ),
                         SizedBox(
-                          height: 10,
+                          height: MediaQuery.of(context).size.height * 0.008,
                         ),
                         Visibility(
                           visible: _con.dataBarGraph.isNotEmpty,
@@ -127,7 +136,8 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                                 style: font.merge(
                                     TextStyle(
                                         fontSize: MediaQuery.of(context).size.width * 0.065,
-                                        color: accentColor
+                                        color: accentColor,
+                                      letterSpacing: amountspacing
                                     )
                                 ),
                               )

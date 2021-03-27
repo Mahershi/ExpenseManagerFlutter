@@ -12,7 +12,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 enum SortType {DATE, CATEGORY}
 List<CategoryModel> categories = List<CategoryModel>();
-int colorIndex = 2;
+int colorIndex = 0;
+
+bool action = false;
+bool large = false;
+bool detail = false;
+bool invertColor = true;
 
 Future<bool> testConnection(context) async{
   var resp = await RestService.request(

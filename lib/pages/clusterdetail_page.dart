@@ -1,6 +1,7 @@
 import 'package:expensemanager/blocs/expense_detail_bloc.dart';
 import 'package:expensemanager/controllers/clustercontroller.dart';
 import 'package:expensemanager/elements/add_expense_dialog.dart';
+import 'package:expensemanager/elements/loader.dart';
 import 'package:expensemanager/elements/no_expenses.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/cluster_model.dart';
@@ -12,6 +13,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:expensemanager/repositories/expense_repository.dart' as exRepo;
 
 class ClusterDetail extends StatefulWidget{
   RouteArgument routeArgument;
@@ -32,6 +34,10 @@ class PageState extends StateMVC<ClusterDetail>{
   @override
   void initState(){
     super.initState();
+    settingsRepo.action = true;
+    settingsRepo.invertColor = false;
+    settingsRepo.large = true;
+    settingsRepo.detail = false;
     cluster = widget.routeArgument.param as ClusterModel;
     _con.currentCluster = cluster;
     _con.getExpensesForClusterId(context, _con.currentCluster.id);
@@ -95,7 +101,7 @@ class PageState extends StateMVC<ClusterDetail>{
                               )
                           ),
                           SizedBox(
-                            height: 10,
+                            height: MediaQuery.of(context).size.height * 0.008,
                           ),
                           Visibility(
                             visible: true,
@@ -126,65 +132,75 @@ class PageState extends StateMVC<ClusterDetail>{
                     borderRadius: BorderRadius.only(topRight: radius20, topLeft: radius20),
                     color: accentColor
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(top: 40),
-                        width: MediaQuery.of(context).size.width/1.9,
-                        child: AspectRatio(
-                          aspectRatio: 1,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Visibility(
+                          visible: _con.expenseList.isNotEmpty,
                           child: Container(
-                              width: MediaQuery.of(context).size.width/1.5,
-                              child: PieChart(
+                            padding: EdgeInsets.only(top: 40),
+                            width: MediaQuery.of(context).size.width/1.9,
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: Container(
+                                  width: MediaQuery.of(context).size.width/1.5,
+                                  child: PieChart(
 
-                                PieChartData(
-                                  sections: _con.getSections(context),
-                                  sectionsSpace: 12,
-                                  startDegreeOffset: 180,
-                                  borderData: FlBorderData(
-                                    show: false,
-                                  ),
-                                  pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
-                                    // print(pieTouchResponse.touchedSectionIndex.toString());
-                                    // print(pieTouchResponse.touchedSection.toString());
-                                    if(pieTouchResponse.touchedSection != null){
-                                      if(pieTouchResponse.touchedSectionIndex != _con.touchedIndex){
-                                        _con.touchedIndex = pieTouchResponse.touchedSectionIndex;
-                                        // print(_con.touchedIndex);
-                                      }else{
-                                        _con.touchedIndex = -1;
-                                      }
-                                      // ExpenseBloc.exListStateSink.add(1);
-                                      setState(() {
-                                        _con.reorder(_con.touchedIndex);
-                                      });
-                                    }
+                                    PieChartData(
+                                      sections: _con.getSections(context),
+                                      sectionsSpace: 12,
+                                      startDegreeOffset: 180,
+                                      borderData: FlBorderData(
+                                        show: false,
+                                      ),
+                                      pieTouchData: PieTouchData(touchCallback: (pieTouchResponse) {
+                                        // print(pieTouchResponse.touchedSectionIndex.toString());
+                                        // print(pieTouchResponse.touchedSection.toString());
+                                        if(pieTouchResponse.touchedSection != null){
+                                          if(pieTouchResponse.touchedSectionIndex != _con.touchedIndex){
+                                            _con.touchedIndex = pieTouchResponse.touchedSectionIndex;
+                                            // print(_con.touchedIndex);
+                                          }else{
+                                            _con.touchedIndex = -1;
+                                          }
+                                          // ExpenseBloc.exListStateSink.add(1);
+                                          setState(() {
+                                            _con.reorder(_con.touchedIndex);
+                                          });
+                                        }
 
-                                  }),
-                                ),
-                                swapAnimationDuration: Duration(milliseconds: 150),
-                              )
+                                      }),
+                                    ),
+                                    swapAnimationDuration: Duration(milliseconds: 150),
+                                  )
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(top: 20, bottom: 40),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: _con.getLegend()
+                        Visibility(
+                          visible: _con.expenseList.isNotEmpty,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 20, bottom: 40),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: _con.getLegend()
+                              ),
+                            )
                           ),
+                        ),
+                        StreamBuilder(
+                          stream: ExpenseBloc.exListStateStream,
+                          builder: (context, v){
+                            return _con.expenseList.isNotEmpty
+                                ? ExpenseBatchPage(con: _con, type: _con.touchedIndex != -1 ? settingsRepo.SortType.CATEGORY : settingsRepo.SortType.DATE,)
+                                : _con.loaded ? Container(child: NoExpenses(textColor: primaryColor, )) : Loading(color: primaryColor,);
+                          }
                         )
-                      ),
-                      StreamBuilder(
-                        stream: ExpenseBloc.exListStateStream,
-                        builder: (context, v){
-                          return _con.expenseList.isNotEmpty ? ExpenseBatchPage(con: _con, type: _con.touchedIndex != -1 ? settingsRepo.SortType.CATEGORY : settingsRepo.SortType.DATE,) : NoExpenses(textColor: primaryColor, );
-                        }
-                      )
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -199,12 +215,18 @@ class PageState extends StateMVC<ClusterDetail>{
                       ExpenseModel e = ExpenseModel.createForCluster(cluster.id);
                       return AddExpenseDialog(expense: e, title: "Add Expense",);
                     },
-                  ).then((value){
-                    print("visible");
-                    if(value == null)
-                      value = false;
-                    if(value){
-                      ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterDetail);
+                  ).then((value) async{
+                    if(value != null){
+                      if(value != false){
+                        await exRepo.saveExpense(value, context).then((value){
+                          print("Value:  " + value.toString());
+                          if(value){
+                            ExpenseBloc.expEventSink
+                                .add(ExpenseEvent.RefreshClusterDetail);
+                          }
+
+                        });
+                      }
                     }
                   });
                 },

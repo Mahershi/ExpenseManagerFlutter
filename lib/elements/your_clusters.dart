@@ -81,7 +81,7 @@ class PageState extends State<YourClusters>{
         // margin: EdgeInsets.symmetric(vertical: 30),
         width: MediaQuery.of(context).size.width,
         // height: MediaQuery.of(context).size.height / 1.5,
-        child: ListView.builder(
+        child: clusterRepo.clusters.length > 1 ? ListView.builder(
           shrinkWrap: true,
           itemCount: clusterRepo.clusters.length - 1,
           itemBuilder: (context, index){
@@ -122,6 +122,13 @@ class PageState extends State<YourClusters>{
               ),
             );
           },
+        ) : Text(
+          "No Clutsers Found",
+          style: font.merge(
+            TextStyle(
+
+            )
+          ),
         ),
       ),
     );

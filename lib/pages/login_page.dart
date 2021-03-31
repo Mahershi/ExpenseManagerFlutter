@@ -83,18 +83,6 @@ class PageState extends StateMVC<LoginPage> {
                                     )
                                 ),
                               ),
-                              // SizedBox(
-                              //   height: 10,
-                              // ),
-                              // Text(
-                              //   "Lets get you started.",
-                              //   style: font.merge(
-                              //     TextStyle(
-                              //       fontSize: MediaQuery.of(context).size.width * 0.04,
-                              //       color: primaryColor,
-                              //     )
-                              //   ),
-                              // )
                             ],
                           )
                         ),

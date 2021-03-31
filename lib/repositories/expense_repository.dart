@@ -102,6 +102,7 @@ Future<bool> deleteExpense(expenseId, context) async{
     showError: true
   );
   if(resp['success'] == 'true'){
+    print("Expense Deleted");
     return true;
   }
   return false;

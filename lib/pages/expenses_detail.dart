@@ -286,35 +286,40 @@ class PageState extends StateMVC<ExpensesDetail> with RouteAware{
             Align(
               alignment: Alignment.bottomCenter,
               child: InkWell(
-                onTap: (){
-                  showDialog(
-                    context: context,
-                    builder: (context){
-                      ExpenseModel e = ExpenseModel.createFor(currentMonth+1, currentYear);
-                      // e.id = null;
-                      // e.cluster_id = '0';
-                      // e.category_id = '1';
-                      // e.name = '';
-                      // e.amount = '0';
-                      // DateTime time = DateTime.now();
-                      // e.expense_date = DateTime(currentYear, currentMonth+1, DateTime.now().day, time.hour, time.minute, time.second).toString();
-                      // e.user_id = currentUser.id;
-                      return AddExpenseDialog(expense: e, title: "Add Expense",);
-                    },
-                  ).then((value) async{
-                    if(value != null){
-                      if(value != false){
-                        await exRepo.saveExpense(value, context).then((value){
-                          print("Value:  " + value.toString());
-                          if(value){
-                            ExpenseBloc.expEventSink
-                                .add(ExpenseEvent.RefreshExpenseDetail);
-                          }
-
-                        });
-                      }
+                onTap: () async{
+                  ExpenseModel e = ExpenseModel.createFor(currentMonth+1, currentYear);
+                  await Navigator.of(context).pushNamed('/AddExpense', arguments: RouteArgument(param: e)).then((value) async{
+                    if(value != false){
+                      print(value.runtimeType);
+                      await exRepo.saveExpense(value, context).then((value){
+                        if(value){
+                          ExpenseBloc.expEventSink
+                              .add(ExpenseEvent.RefreshExpenseDetail);
+                        }
+                      });
                     }
                   });
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (context){
+                  //     ExpenseModel e = ExpenseModel.createFor(currentMonth+1, currentYear);
+                  //
+                  //     return AddExpenseDialog(expense: e, title: "Add Expense",);
+                  //   },
+                  // ).then((value) async{
+                  //   if(value != null){
+                  //     if(value != false){
+                  //       await exRepo.saveExpense(value, context).then((value){
+                  //         print("Value:  " + value.toString());
+                  //         if(value){
+                  //           ExpenseBloc.expEventSink
+                  //               .add(ExpenseEvent.RefreshExpenseDetail);
+                  //         }
+                  //
+                  //       });
+                  //     }
+                  //   }
+                  // });
                 },
                 child: Container(
                   margin: EdgeInsets.all(20),

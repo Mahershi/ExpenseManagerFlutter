@@ -24,57 +24,35 @@ class ClusterController extends ControllerMVC{
   int touchedIndex = -1;
 
   Map<String, List<ExpenseModel>> pieData = Map<String, List<ExpenseModel>>();
-  // Map<String, List<ExpenseModel>> pieDataCopy = Map<String, List<ExpenseModel>>();
 
   List<PieChartSectionData> pieSections = List<PieChartSectionData>();
   Map<String, double> percentage = Map<String, double>();
 
   Future<void> getExpensesForClusterId(context, clusterId) async{
+    expenses.clear();
+    print("EX LENGHT  2222: " + expenses.length.toString());
     loaded = false;
     var qp = {
       'cluster': clusterId,
       'user_id': currentUser.id
     };
     var data = await exRepo.getExpensesDynamicQP(context, qp: qp, returnOrNot: true,);
-    expenses.clear();
+
     print("got expenses");
     for (var ex in data){
       ExpenseModel e = ExpenseModel.fromJson(ex);
       expenses.add(e);
-      // print(e.toMap().toString());
+      print("Added" + e.toMap().toString());
     }
-
+    print("al added");
     await calculateTotal();
     await prepareListPie();
     await prepareList();
   }
 
-  Future<void> fetchClusters(context) async{
-    print("fetching");
-    await clusterRepo.getClusters(context);
-    setState(() { });
-  }
 
-  Future<void> addNewCluster() async{
-    newCluster = ClusterModel.create();
-    showDialog(
-      context: this.stateMVC.context,
-      builder: (context){
-        return ClusterEditDialog(cluster: newCluster,);
-      }
-    ).then((value) async {
-      if(value != null){
-        if(value != false){
-          print(value.toMap().toString());
-          await clusterRepo.addorModifyCluster(this.stateMVC.context, value).then((value) async{
-            if(value){
-              ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterList);
-            }
-          });
-        }
-      }
-    });
-  }
+
+
 
   Future<void> prepareList() async {
     expenseList.clear();
@@ -85,34 +63,35 @@ class ClusterController extends ControllerMVC{
       expenseList[temp.toString().substring(0, 10)].add(i);
     }
     setState(() {
+      print("Settings Srtate: ");
       loaded = true;
     });
   }
 
   Future<void> prepareListPie() async{
+    print("preparing Pi data");
     pieData.clear();
     for(var i in expenses){
       String cat = await settingsRepo.getCategoryById(i.category_id).name;
       if(!pieData.containsKey(cat)){
         pieData[cat] = [];
       }
-      print("added in " + cat);
       pieData[cat].add(i);
     }
-    print("created PIE data : " + pieData.length.toString());
-    // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
-    // print("PDC l" + pieDataCopy.length.toString());
-
-    if(pieData.isNotEmpty)
-      calculatePercentage();
+    print("pie data dione");
+    await calculatePercentage();
   }
 
   Future<void> calculatePercentage() async{
-    int max = 0;
 
+    int max = 0;
+    percentage.clear();
+    print("prepariung percent");
     for(var k in pieData.keys){
       int tempTotal = 0;
       for(var v in pieData[k]){
+        print("V:");
+        print(v.toMap().toString());
         tempTotal += int.parse(v.amount);
       }
       percentage[k] = (tempTotal / total)*100.0;
@@ -122,36 +101,30 @@ class ClusterController extends ControllerMVC{
     for(var k in percentage.keys){
       print("CAt: " + k + ", " + percentage[k].toString());
     }
-
-    if(pieData.length > 1)
-      pieData = sortMap();
-    // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
+    // print("P Lengt: " + percentage.length.toString());
+    // if(percentage.length > 1)
+    //   pieData = sortMap();
   }
 
-  dynamic sortMap(){
+  dynamic sortMap() async{
+    print("called sort map");
     SplayTreeMap<String, List<ExpenseModel>> sorted;
+    print("PERCENTAGE: " + percentage.length.toString());
     sorted = SplayTreeMap.from(
       pieData, (k1, k2) => percentage[k2].compareTo(percentage[k1])
     );
-    print("Sorted kye order");
-    for(var i in sorted.keys){
-      print("KEY: " + i.toString());
-    }
     return sorted;
   }
 
   void reorder(id){
     print("called reorder");
     if(id == -1){
-      if(pieData.length > 1)
-        pieData = sortMap();
-      // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
+      // if(percentage.length > 1)
+      //   pieData = sortMap();
     }
     else{
-      // pieDataCopy.clear();
-      // pieDataCopy = Map<String, List<ExpenseModel>>.from(pieData);
-      if(pieData.length > 1)
-        pieData = sortMap();
+      // if(percentage.length > 1)
+      //   pieData = sortMap();
       Map<String, List<ExpenseModel>> temp = {};
       for(var i=0; i<percentage.keys.length; i++){
         if(i==id){
@@ -229,10 +202,37 @@ class ClusterController extends ControllerMVC{
     return legends;
   }
 
+  Future<void> addNewCluster() async{
+    newCluster = ClusterModel.create();
+    showDialog(
+        context: this.stateMVC.context,
+        builder: (context){
+          return ClusterEditDialog(cluster: newCluster,);
+        }
+    ).then((value) async {
+      if(value != null){
+        if(value != false){
+          print(value.toMap().toString());
+          await clusterRepo.addorModifyCluster(this.stateMVC.context, value).then((value) async{
+            if(value){
+              ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterList);
+            }
+          });
+        }
+      }
+    });
+  }
+
   Future<void> calculateTotal() async{
     total = 0;
     for (var ex in expenses){
       total += int.parse(ex.amount);
     }
+  }
+
+  Future<void> fetchClusters(context) async{
+    print("fetching");
+    await clusterRepo.getClusters(context);
+    setState(() { });
   }
 }

@@ -27,13 +27,15 @@ class ExpenseModel{
   }
 
   ExpenseModel.createFor(monthLocal, yearLocal){
+    print("for month : " + monthLocal.toString());
     id = null;
     cluster_id = '0';
     category_id = '1';
     name = '';
     amount = '';
     DateTime time = DateTime.now();
-    expense_date = DateTime(yearLocal, monthLocal, DateTime.now().day, time.hour, time.minute, time.second).toString();
+    int day = 1;
+    expense_date = DateTime(yearLocal, monthLocal, day, time.hour, time.minute, time.second).toString();
     user_id = currentUser.id;
   }
 

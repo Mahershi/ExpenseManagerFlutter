@@ -5,6 +5,7 @@ import 'package:expensemanager/elements/slidablebutton.dart';
 import 'package:expensemanager/elements/your_clusters.dart';
 import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/expense_model.dart';
+import 'package:expensemanager/models/route_arguement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:expensemanager/repositories/settings_repo.dart' as settingsRepo;
@@ -121,7 +122,7 @@ class PageState extends State<ExpenseItem>{
             ).then((value) async {
               if(value!=null){
                 if(value){
-                  exRepo.deleteExpense(widget.expense.id, context);
+                  await exRepo.deleteExpense(widget.expense.id, context);
                   slidableController.activeState.close();
                   ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
                   ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
@@ -149,38 +150,56 @@ class PageState extends State<ExpenseItem>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     InkWell(
-                      onTap: (){
-                        showDialog(
-                          context: context,
-                          builder: (context){
-                            return AddExpenseDialog(expense: widget.expense, title: "Edit Expense",);
-                          }
-                        ).then((value) async {
-                          if(value == null)
-                            value = false;
-                          print("Value here");
+                      onTap: () async{
+                        await Navigator.of(context).pushNamed('/AddExpense', arguments: RouteArgument(param: widget.expense)).then((value) async{
                           if(value != false){
                             await exRepo.saveExpense(value, context).then((value){
                               print("Value:  " + value.toString());
                               if(value){
-                                  if (settingsRepo.detail) {
-                                    print("trigger detail");
-                                    ExpenseBloc.expEventSink
-                                        .add(ExpenseEvent.RefreshHome);
-                                    ExpenseBloc.expEventSink
-                                        .add(ExpenseEvent.RefreshExpenseDetail);
-                                  } else {
-                                    print("trigger cluster");
-                                    ExpenseBloc.expEventSink
-                                        .add(ExpenseEvent.RefreshClusterDetail);
-                                  }
+                                if (settingsRepo.detail) {
+                                  print("trigger detail");
+                                  ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshHome);
+                                  ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshExpenseDetail);
+                                } else {
+                                  print("trigger cluster");
+                                  ExpenseBloc.expEventSink.add(ExpenseEvent.RefreshClusterDetail);
                                 }
+                              }
 
                             });
-
                           }
-
                         });
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (context){
+                        //     return AddExpenseDialog(expense: widget.expense, title: "Edit Expense",);
+                        //   }
+                        // ).then((value) async {
+                        //   if(value == null)
+                        //     value = false;
+                        //   print("Value here");
+                        //   if(value != false){
+                        //     await exRepo.saveExpense(value, context).then((value){
+                        //       print("Value:  " + value.toString());
+                        //       if(value){
+                        //           if (settingsRepo.detail) {
+                        //             print("trigger detail");
+                        //             ExpenseBloc.expEventSink
+                        //                 .add(ExpenseEvent.RefreshHome);
+                        //             ExpenseBloc.expEventSink
+                        //                 .add(ExpenseEvent.RefreshExpenseDetail);
+                        //           } else {
+                        //             print("trigger cluster");
+                        //             ExpenseBloc.expEventSink
+                        //                 .add(ExpenseEvent.RefreshClusterDetail);
+                        //           }
+                        //         }
+                        //
+                        //     });
+                        //
+                        //   }
+                        //
+                        // });
                       },
                       child: Container(
                         padding: EdgeInsets.all(8),

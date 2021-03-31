@@ -28,7 +28,7 @@ class PageState extends State<AddExpenseDialog>{
   String selectedDateString;
   String currentCluster = '0';
 
-  final formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
   @override
   void initState(){
     super.initState();
@@ -94,12 +94,7 @@ class PageState extends State<AddExpenseDialog>{
                 print(widget.expense.cluster_id);
                 widget.expense.expense_date = selectedDateString;
                 Navigator.of(context).pop(widget.expense);
-                //
-                // await exRepo.saveExpense(widget.expense, context).then((value){
-                //
-                //   print("Value:  " + value.toString());
-                //   Navigator.of(context).pop(value);
-                // });
+
               }
             },
             style: OutlinedButton.styleFrom(

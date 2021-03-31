@@ -149,7 +149,12 @@ class PageState extends StateMVC<AccountPage>{
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            AccountItem(text: "Edit Profile", imagePath: 'assets/img/edit.png',),
+                            InkWell(
+                              onTap: (){
+                                Navigator.of(context).pushNamed('/EditProfile');
+                              },
+                                child: AccountItem(text: "Edit Profile", imagePath: 'assets/img/edit.png',)
+                            ),
                             InkWell(
                               child: AccountItem(
                                 text: "My Clusters", imagePath: 'assets/img/cluster.png',

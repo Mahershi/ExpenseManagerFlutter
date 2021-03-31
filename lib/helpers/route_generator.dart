@@ -1,7 +1,10 @@
+import 'package:expensemanager/elements/add_expense.dart';
 import 'package:expensemanager/pages/account_page.dart';
+import 'package:expensemanager/pages/change_password.dart';
 import 'package:expensemanager/pages/clusterdetail_page.dart';
 import 'package:expensemanager/pages/clusters_page.dart';
 import 'package:expensemanager/pages/colorspage.dart';
+import 'package:expensemanager/pages/edit_profile.dart';
 import 'package:expensemanager/pages/expenses_detail.dart';
 import 'package:expensemanager/pages/home_page.dart';
 import 'package:expensemanager/pages/login_page.dart';
@@ -32,6 +35,12 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => SettingsPage());
       case '/Colors':
         return MaterialPageRoute(builder: (_) => ColorsPage());
+      case '/AddExpense':
+        return MaterialPageRoute(builder: (_) => AddExpense(routeArgument: args,));
+      case '/EditProfile':
+        return MaterialPageRoute(builder: (_) => EditProfile());
+      case '/ChangePassword':
+        return MaterialPageRoute(builder: (_) => ChangePassword(routeArgument: args,));
       default:
         return MaterialPageRoute(builder: (_) => Scaffold(body: SafeArea(child: Text('Route Error'))));
     }

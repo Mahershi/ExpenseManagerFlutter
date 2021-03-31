@@ -5,6 +5,7 @@ import 'package:expensemanager/pages/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'app_config.dart';
 import 'package:expensemanager/network/rest_service.dart';
+import 'helpers/constants.dart';
 import 'repositories/settings_repo.dart' as settingsRepo;
 
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget{
 }
 
 void setUpConfiguration() {
-  AppConfig.setEnvironment(Environment.STAGING);
+  AppConfig.setEnvironment(Environment.DEVELOPMENT);
   if (Platform.isAndroid) {
     AppConfig.config.clientDevice = Device.ANDROID.toString();
   } else {

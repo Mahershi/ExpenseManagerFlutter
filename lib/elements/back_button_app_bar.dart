@@ -7,8 +7,9 @@ class BackbuttonAppBar extends StatelessWidget{
   String tag;
   Color color;
   Function action;
+  IconData actionIcon;
 
-  BackbuttonAppBar({this.heading = '', this.color ,this.tag, this.action});
+  BackbuttonAppBar({this.heading = '', this.color ,this.tag, this.action, this.actionIcon = Icons.add});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -79,7 +80,7 @@ class BackbuttonAppBar extends StatelessWidget{
                       borderRadius: borderRadius12
                   ),
                   child: Icon(
-                    Icons.add,
+                    actionIcon,
                     color: color,
                   )
               ),

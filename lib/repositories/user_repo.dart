@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:expensemanager/helpers/constants.dart';
 import 'package:expensemanager/models/user_model.dart';
 import 'package:expensemanager/network/rest_service.dart';
 import 'package:expensemanager/network/APIs.dart';
@@ -21,7 +22,9 @@ Future<dynamic> loginUser(String uname, String password, context) async {
     endpoint: API.login,
     authRequired: false,
     method: 'POST',
-    data: data
+    data: data,
+    showLoader: true,
+    loaderColor: accentColor
   );
   return resp;
 }
@@ -39,7 +42,9 @@ Future<dynamic> registerUser(String name, String uname, String password, String 
       endpoint: API.register,
       authRequired: false,
       method: 'POST',
-      data: data
+      data: data,
+    showLoader: true,
+    loaderColor: accentColor
   );
   return resp;
 
@@ -56,4 +61,26 @@ Future<void> getFromSP() async{
   var user = await pref.get('user');
   currentUser = UserModel.fromJson(json.decode(user));
 }
+Future<bool> setPassword(String password, context) async{
+  String api = API.change_password;
+  api += '/${currentUser.id}/';
+  String method = 'PUT';
+  var data = {
+    'password': password
+  };
 
+  var resp = await RestService.request(
+    context: context,
+    endpoint: api,
+    data: data,
+    method: method,
+    showLoader: true,
+    loaderColor: primaryColor,
+    authRequired: false,
+    showError: true,
+    showSuccess: true
+  );
+
+  print(resp.toString());
+  return resp['success'] == "true";
+}

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "164203539530",
+    "project_id": "expense-manager-dba0f",
+    "storage_bucket": "expense-manager-dba0f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:164203539530:android:f0899630fd5cf48d0d4ab3",
+        "android_client_info": {
+          "package_name": "com.bhavsar.expensemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "164203539530-hrjckch2dfjn9kufcdrkcf95qthrn894.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM4zo0tAUn4R6BCBfuSdbo3Mh8551roOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "164203539530-hrjckch2dfjn9kufcdrkcf95qthrn894.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

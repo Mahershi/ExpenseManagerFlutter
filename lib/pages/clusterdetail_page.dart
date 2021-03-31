@@ -146,7 +146,6 @@ class PageState extends StateMVC<ClusterDetail>{
                               child: Container(
                                   width: MediaQuery.of(context).size.width/1.5,
                                   child: PieChart(
-
                                     PieChartData(
                                       sections: _con.getSections(context),
                                       sectionsSpace: 12,
@@ -164,7 +163,6 @@ class PageState extends StateMVC<ClusterDetail>{
                                           }else{
                                             _con.touchedIndex = -1;
                                           }
-                                          // ExpenseBloc.exListStateSink.add(1);
                                           setState(() {
                                             _con.reorder(_con.touchedIndex);
                                           });
@@ -190,14 +188,9 @@ class PageState extends StateMVC<ClusterDetail>{
                             )
                           ),
                         ),
-                        StreamBuilder(
-                          stream: ExpenseBloc.exListStateStream,
-                          builder: (context, v){
-                            return _con.expenseList.isNotEmpty
-                                ? ExpenseBatchPage(con: _con, type: _con.touchedIndex != -1 ? settingsRepo.SortType.CATEGORY : settingsRepo.SortType.DATE,)
-                                : _con.loaded ? Container(child: NoExpenses(textColor: primaryColor, )) : Loading(color: primaryColor,);
-                          }
-                        )
+                        _con.expenseList.isNotEmpty
+                            ? ExpenseBatchPage(con: _con, type: _con.touchedIndex != -1 ? settingsRepo.SortType.CATEGORY : settingsRepo.SortType.DATE,)
+                            : _con.loaded ? Container(child: NoExpenses(textColor: primaryColor, )) : Loading(color: primaryColor,),
 
                       ],
                     ),
@@ -208,27 +201,39 @@ class PageState extends StateMVC<ClusterDetail>{
             Align(
               alignment: Alignment.bottomCenter,
               child: InkWell(
-                onTap: (){
-                  showDialog(
-                    context: context,
-                    builder: (context){
-                      ExpenseModel e = ExpenseModel.createForCluster(cluster.id);
-                      return AddExpenseDialog(expense: e, title: "Add Expense",);
-                    },
-                  ).then((value) async{
-                    if(value != null){
-                      if(value != false){
-                        await exRepo.saveExpense(value, context).then((value){
-                          print("Value:  " + value.toString());
-                          if(value){
-                            ExpenseBloc.expEventSink
-                                .add(ExpenseEvent.RefreshClusterDetail);
-                          }
-
-                        });
-                      }
+                onTap: () async{
+                  ExpenseModel e = ExpenseModel.createForCluster(cluster.id);
+                  await Navigator.of(context).pushNamed('/AddExpense', arguments: RouteArgument(param: e)).then((value) async{
+                    if(value != false){
+                      print(value.runtimeType);
+                      await exRepo.saveExpense(value, context).then((value){
+                        if(value){
+                          ExpenseBloc.expEventSink
+                              .add(ExpenseEvent.RefreshClusterDetail);
+                        }
+                      });
                     }
                   });
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (context){
+                  //     ExpenseModel e = ExpenseModel.createForCluster(cluster.id);
+                  //     return AddExpenseDialog(expense: e, title: "Add Expense",);
+                  //   },
+                  // ).then((value) async{
+                  //   if(value != null){
+                  //     if(value != false){
+                  //       await exRepo.saveExpense(value, context).then((value){
+                  //         print("Value:  " + value.toString());
+                  //         if(value){
+                  //           ExpenseBloc.expEventSink
+                  //               .add(ExpenseEvent.RefreshClusterDetail);
+                  //         }
+                  //
+                  //       });
+                  //     }
+                  //   }
+                  // });
                 },
                 child: Container(
                   margin: EdgeInsets.all(20),

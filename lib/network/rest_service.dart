@@ -19,7 +19,7 @@ class RestService {
       baseUrl: baseUrl,
     ))
       ..interceptors.add(AppInterceptors());
-
+    print(baseUrl.toString());
     dio.interceptors
         .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
       print("Request Data ${options.data}");
@@ -83,6 +83,7 @@ class RestService {
         options: _cacheOptions,
       );
       if(showLoader && context != null){
+        print("popping loader");
         Navigator.of(context).pop();
       }
       var apiResponJson = response.data;
@@ -103,6 +104,10 @@ class RestService {
         return response.data;
       }
     } on DioError catch (e) {
+      if(showLoader && context != null){
+        print("popping loader");
+        Navigator.of(context).pop();
+      }
       String erMsg = 'Connection Error';
       String erMsg2 = '';
       if(e.response != null){

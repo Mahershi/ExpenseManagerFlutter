@@ -7,6 +7,7 @@ import 'app_config.dart';
 import 'package:expensemanager/network/rest_service.dart';
 import 'helpers/constants.dart';
 import 'repositories/settings_repo.dart' as settingsRepo;
+import 'helpers/firebase.dart';
 
 
 void main() async{
@@ -14,6 +15,7 @@ void main() async{
   setUpConfiguration();
   RestService.init();
   await settingsRepo.getColorIndex();
+  initializeFirebase();
   runApp(MyApp());
 }
 

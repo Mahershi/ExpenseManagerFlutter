@@ -8,6 +8,7 @@ class API{
    */
   static String users = 'users';
   static String register = 'users/';
+  static String isExistUser = 'users/exists/';
 
   static String categories = 'categories';
 

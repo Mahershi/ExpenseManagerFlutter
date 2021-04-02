@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "164203539530-qpbnit022u09fbbr6uqrm28dv1cbdn70.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bhavsar.expensemanager",
+            "certificate_hash": "4caee404363ab09b2bb292f8bc28971ee62b7517"
+          }
+        },
+        {
           "client_id": "164203539530-hrjckch2dfjn9kufcdrkcf95qthrn894.apps.googleusercontent.com",
           "client_type": 3
         }

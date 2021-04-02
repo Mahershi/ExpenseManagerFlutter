@@ -291,34 +291,39 @@ class PageState extends StateMVC<LoginPage> {
                         ),
                         Align(
                           alignment: Alignment.center,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(vertical: 10),
-                            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                            // width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
-                                borderRadius: borderRadius12,
-                                border: Border.all(color: primaryColor.withOpacity(0.6))
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Image.asset(
-                                  'assets/img/google.png',
-                                  width: MediaQuery.of(context).size.width * 0.07,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Text(
-                                  "Sign In with Google",
-                                  style: font.merge(
-                                      TextStyle(
-                                          color: primaryColor,
-                                          fontSize: MediaQuery.of(context).size.width * 0.042
-                                      )
+                          child: InkWell(
+                            onTap: (){
+                              _con.googleLoginIn(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(vertical: 10),
+                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                              // width: MediaQuery.of(context).size.width,
+                              decoration: BoxDecoration(
+                                  borderRadius: borderRadius12,
+                                  border: Border.all(color: primaryColor.withOpacity(0.6))
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset(
+                                    'assets/img/google.png',
+                                    width: MediaQuery.of(context).size.width * 0.07,
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    width: 20,
+                                  ),
+                                  Text(
+                                    "Sign In with Google",
+                                    style: font.merge(
+                                        TextStyle(
+                                            color: primaryColor,
+                                            fontSize: MediaQuery.of(context).size.width * 0.042
+                                        )
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         )

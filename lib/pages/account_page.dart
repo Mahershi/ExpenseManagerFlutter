@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:expensemanager/repositories/user_repo.dart' as userRepo;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:expensemanager/helpers/firebase.dart' as fb;
 
 
 class AccountPage extends StatefulWidget{
@@ -178,6 +179,7 @@ class PageState extends StateMVC<AccountPage>{
                       onTap: ()async{
                         SharedPreferences _pref = await SharedPreferences.getInstance();
                         await _pref.remove('user');
+                        await fb.signOut();
                         Navigator.of(context).pushNamedAndRemoveUntil('/LoginPage', (route) => false);
                       },
                       child: Container(

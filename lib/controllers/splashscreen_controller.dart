@@ -24,6 +24,7 @@ class SplashScreenController extends ControllerMVC{
   }
 
   Future<void> getCategories(context)async{
+    print("getting cat");
     await settingsRepo.getCategories(context);
   }
 }

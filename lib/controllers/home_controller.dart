@@ -101,6 +101,7 @@ class HomeController extends ControllerMVC{
     var qp = {
       'user_id': userRepo.currentUser.id
     };
+
     await exRepo.getSpan(context, qp:qp);
     currentYear = exRepo.latest_year;
   }

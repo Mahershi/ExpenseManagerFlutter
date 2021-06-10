@@ -148,7 +148,7 @@ class PageState extends StateMVC<ClusterDetail>{
                                   child: PieChart(
                                     PieChartData(
                                       sections: _con.getSections(context),
-                                      sectionsSpace: 12,
+                                      sectionsSpace: 8,
                                       startDegreeOffset: 180,
                                       borderData: FlBorderData(
                                         show: false,

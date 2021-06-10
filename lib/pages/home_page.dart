@@ -287,7 +287,7 @@ class PageState extends StateMVC<HomePage> with RouteAware{
                             ],
                           ),
                         ),
-                        _con.expenseList.isEmpty ? Container(child: NoExpenses(textColor: primaryColor,),margin: EdgeInsets.symmetric(vertical: 30),) : ExpenseBatchPage(con: _con,),
+                        _con.expenseList.isEmpty ? Container(child: NoExpenses(textColor: primaryColor, text: "No Expenses for last 7 days!",),margin: EdgeInsets.symmetric(vertical: 30),) : ExpenseBatchPage(con: _con,),
                       ],
                     )
                 ),

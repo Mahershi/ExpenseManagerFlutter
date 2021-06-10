@@ -52,9 +52,9 @@ class RestService {
         bool showSuccess = false,
         Color loaderColor}) async {
     try {
-      if (AppConfig.config.environment == 'development') {
-        // print('Calling: ${method.padLeft(4, ' ')} $endpoint');
-      }
+      // if (AppConfig.config.environment == 'staging') {
+      //   print('Calling: ${method.padLeft(4, ' ')} $endpoint');
+      // }
       String language = 'es';
 
       Options _cacheOptions = Options();
@@ -88,7 +88,8 @@ class RestService {
       }
       var apiResponJson = response.data;
       var json = jsonDecode(response.toString());
-      // print(response.statusCode);
+      print(response.statusCode);
+      print("RES:" + apiResponJson.toString());
       if (json['success'] == "true" || response.statusCode == 200 || response.statusCode == 201) {
         // print("Success");
         if(showSuccess && context != null){

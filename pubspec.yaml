@@ -26,6 +26,8 @@ dependencies:
   fluttertoast: ^7.1.8
   email_validator: 1.0.6
   flutter_slidable: ^0.5.7
+  flutter_launcher_icons: ^0.8.1
+
 
 
 
@@ -48,6 +50,10 @@ flutter:
     - assets/cfg/
     - assets/lottie/
 
+flutter_icons:
+  image_path: 'assets/img/rupee.png'
+  android: true
+  ios: true
   
   
   

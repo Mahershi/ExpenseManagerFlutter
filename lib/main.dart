@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget{
 }
 
 void setUpConfiguration() {
-  AppConfig.setEnvironment(Environment.DEVELOPMENT);
+  AppConfig.setEnvironment(Environment.STAGING);
   if (Platform.isAndroid) {
     AppConfig.config.clientDevice = Device.ANDROID.toString();
   } else {

@@ -157,10 +157,10 @@ class ClusterController extends ControllerMVC{
           radius: isTouched ? MediaQuery.of(context).size.width * 0.13 : MediaQuery.of(context).size.width * 0.1,
           titleStyle: font.merge(
             TextStyle(
-              fontSize: isTouched ? MediaQuery.of(context).size.width * 0.03 : MediaQuery.of(context).size.width * 0.025,
+              fontSize: isTouched ? MediaQuery.of(context).size.width * 0.03 : percentage[percentageKey] < 1 ? MediaQuery.of(context).size.width * 0.015 : MediaQuery.of(context).size.width * 0.025,
             )
           ),
-          value: percentage[percentageKey],
+          value: percentage[percentageKey] < 1 ? 4 : percentage[percentageKey],
           title: percentage[percentageKey].toStringAsFixed(1) + "%"
         );
       }

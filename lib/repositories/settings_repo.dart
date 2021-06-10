@@ -38,9 +38,11 @@ Future<void> getCategories(context) async{
     endpoint: API.categories,
     authRequired: false
   );
+  print(resp['data']);
   if(resp['success'] == 'true'){
     for(var i in resp['data']){
       var c = CategoryModel.fromJson(i);
+      print("Cat : " + c.toMap().toString());
       categories.add(c);
     }
   }

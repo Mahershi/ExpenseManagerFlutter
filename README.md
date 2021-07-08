@@ -1,16 +1,13 @@
-# expensemanager
+Flutter Application: Expense Manager
 
-A new Flutter application.
+A simple flutter application wherein user can log daily expenses and view them as needed. Additional features cultivates a sense of ease of access of data and how user wants to club and view their data.
 
-## Getting Started
+- Sign up with/O Google
+- Create Daily Expenses, assign Categories
+- Create Clusters of Expenses for statistical data and ease of access (Eg: Trip to NY)
+- Clusters show statistical data based on Date of Expense and Categories
+- Show Monthly Stats for last 6 months
+- Multiple themes
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+There might be minor UI issues realted to different screen sizes due to UI testing limited to 2 devices.
+PS. I Dont have multiple physical devices and my system cant handle Android Emulator.
